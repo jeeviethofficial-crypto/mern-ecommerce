@@ -1,6 +1,36 @@
-import mongoose from 'mongoose';
+import mongoose, { Document, Model } from 'mongoose';
 
-const orderSchema = new mongoose.Schema(
+export interface IOrderItem {
+  product: mongoose.Types.ObjectId;
+  name: string;
+  qty: number;
+  price: number;
+}
+
+export interface IShippingAddress {
+  fullName: string;
+  address: string;
+  city: string;
+  postalCode: string;
+  country: string;
+}
+
+export interface IOrder extends Document {
+  user: mongoose.Types.ObjectId;
+  orderItems: IOrderItem[];
+  shippingAddress: IShippingAddress;
+  paymentMethod: string;
+  itemsPrice: number;
+  shippingPrice: number;
+  taxPrice: number;
+  totalPrice: number;
+  isPaid: boolean;
+  paidAt?: Date;
+  isDelivered: boolean;
+  deliveredAt?: Date;
+}
+
+const orderSchema = new mongoose.Schema<IOrder>(
   {
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     orderItems: [
@@ -25,11 +55,11 @@ const orderSchema = new mongoose.Schema(
     totalPrice: { type: Number, required: true },
     isPaid: { type: Boolean, default: false },
     paidAt: { type: Date },
-    // Admin module handles fulfillment and updates isDelivered / deliveredAt
     isDelivered: { type: Boolean, default: false },
     deliveredAt: { type: Date },
   },
   { timestamps: true }
 );
 
-export const Order = mongoose.models.Order || mongoose.model('Order', orderSchema);
+const Order: Model<IOrder> = (mongoose.models.Order as Model<IOrder>) || mongoose.model<IOrder>('Order', orderSchema);
+export { Order };

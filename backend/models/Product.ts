@@ -1,6 +1,26 @@
-import mongoose from 'mongoose';
+import mongoose, { Document, Model } from 'mongoose';
 
-const reviewSchema = new mongoose.Schema(
+export interface IReview extends Document {
+  name: string;
+  rating: number;
+  comment: string;
+  user: mongoose.Types.ObjectId;
+}
+
+export interface IProduct extends Document {
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  imageUrl?: string;
+  countInStock: number;
+  isActive: boolean;
+  reviews: mongoose.Types.DocumentArray<IReview>;
+  rating: number;
+  numReviews: number;
+}
+
+const reviewSchema = new mongoose.Schema<IReview>(
   {
     name: { type: String, required: true },
     rating: { type: Number, required: true },
@@ -14,7 +34,7 @@ const reviewSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const productSchema = new mongoose.Schema(
+const productSchema = new mongoose.Schema<IProduct>(
   {
     name: { type: String, required: true },
     description: { type: String, required: true },
@@ -22,9 +42,7 @@ const productSchema = new mongoose.Schema(
     category: { type: String, required: true },
     imageUrl: { type: String, required: false },
     countInStock: { type: Number, required: true, default: 0 },
-    // Admin module manages this flag to hide products
     isActive: { type: Boolean, default: true },
-    // Reviews
     reviews: [reviewSchema],
     rating: { type: Number, required: true, default: 0 },
     numReviews: { type: Number, required: true, default: 0 },
@@ -32,4 +50,5 @@ const productSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export const Product = mongoose.models.Product || mongoose.model('Product', productSchema);
+const Product: Model<IProduct> = (mongoose.models.Product as Model<IProduct>) || mongoose.model<IProduct>('Product', productSchema);
+export { Product };
