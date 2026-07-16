@@ -67,7 +67,7 @@ export function AdminOrderList() {
                     className="hover:bg-neutral-50 transition-colors"
                   >
                     <td className="px-6 py-4 text-sm text-neutral-900 font-medium">{order._id}</td>
-                    <td className="px-6 py-4 text-neutral-500 text-sm">{order.user}</td>
+                  <td className="px-6 py-4 text-neutral-500 text-sm">{order.user?.name || order.user?._id}</td>
                     <td className="px-6 py-4 text-neutral-500">{new Date(order.createdAt).toLocaleDateString()}</td>
                     <td className="px-6 py-4 font-bold">${order.totalPrice.toFixed(2)}</td>
                     <td className="px-6 py-4">
