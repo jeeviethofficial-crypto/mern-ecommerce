@@ -102,17 +102,16 @@ router.post('/:id/reviews', protect, async (req, res) => {
 // @access  Private/Admin
 router.post('/', protect, admin, async (req, res) => {
   try {
+    const { name, price, description, imageUrl, category, countInStock, isActive } = req.body;
+
     const product = new Product({
-      name: 'Sample name',
-      price: 0,
-      category: 'Sample category',
-      imageUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80',
-      countInStock: 0,
-      isActive: false,
-      rating: 0,
-      numReviews: 0,
-      reviews: [],
-      description: 'Sample description',
+      name: name || 'Sample name',
+      price: price ?? 0,
+      description: description || 'Sample description',
+      imageUrl: imageUrl || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80',
+      category: category || 'Sample category',
+      countInStock: countInStock ?? 0,
+      isActive: isActive ?? false,
     });
 
     const createdProduct = await product.save();
