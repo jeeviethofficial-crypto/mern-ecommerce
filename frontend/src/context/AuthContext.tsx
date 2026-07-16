@@ -12,6 +12,7 @@ interface User {
 interface AuthContextType {
   user: User | null;
   login: (email: string, password: string) => Promise<void>;
+  register: (name: string, email: string, password: string) => Promise<void>;
   logout: () => void;
 }
 
@@ -33,13 +34,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('userInfo', JSON.stringify(data));
   };
 
+  const register = async (name: string, email: string, password: string) => {
+    const { data } = await axios.post('/api/users/register', { name, email, password });
+    setUser(data);
+    localStorage.setItem('userInfo', JSON.stringify(data));
+  };
+
   const logout = () => {
     setUser(null);
     localStorage.removeItem('userInfo');
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );
