@@ -87,6 +87,13 @@ export function Profile() {
                       <span className={`inline-block px-2 py-1 text-xs font-semibold rounded-full mt-1 ${order.isDelivered ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
                         {order.isDelivered ? 'Delivered' : 'Processing'}
                       </span>
+                      <p className={`text-xs mt-2 ${order.isPaid ? 'text-green-700' : 'text-gray-500'}`}>
+                        {order.isPaid
+                          ? `Paid by ${order.paymentResult?.method || 'card'}${order.paymentResult?.cardNumber ? ` (${order.paymentResult.cardNumber})` : ''}`
+                          : order.paymentMethod === 'Cash on Delivery'
+                            ? 'Cash on delivery'
+                            : 'Card payment pending'}
+                      </p>
                     </div>
                   </div>
                 ))}
