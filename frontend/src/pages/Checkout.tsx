@@ -129,24 +129,36 @@ export function Checkout() {
           
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
             <h2 className="text-xl font-bold mb-4">Payment Method</h2>
-            <div className="flex gap-4">
-              <label className="flex items-center gap-2">
+            <div className="space-y-2">
+              <label className="flex items-center gap-2 p-2 border rounded-md cursor-pointer hover:bg-gray-50 transition-colors">
                 <input 
                   type="radio" 
                   value="PayPal" 
                   checked={paymentMethod === 'PayPal'} 
                   onChange={(e) => setPaymentMethod(e.target.value)}
+                  className="accent-indigo-600"
                 />
-                PayPal
+                <span className="font-medium">PayPal</span>
               </label>
-              <label className="flex items-center gap-2">
+              <label className="flex items-center gap-2 p-2 border rounded-md cursor-pointer hover:bg-gray-50 transition-colors">
                 <input 
                   type="radio" 
-                  value="Stripe" 
-                  checked={paymentMethod === 'Stripe'} 
+                  value="Cash on Delivery" 
+                  checked={paymentMethod === 'Cash on Delivery'} 
                   onChange={(e) => setPaymentMethod(e.target.value)}
+                  className="accent-indigo-600"
                 />
-                Stripe
+                <span className="font-medium">Cash on Delivery</span>
+              </label>
+              <label className="flex items-center gap-2 p-2 border rounded-md cursor-pointer hover:bg-gray-50 transition-colors">
+                <input 
+                  type="radio" 
+                  value="Card" 
+                  checked={paymentMethod === 'Card'} 
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                  className="accent-indigo-600"
+                />
+                <span className="font-medium">Card</span>
               </label>
             </div>
           </div>
