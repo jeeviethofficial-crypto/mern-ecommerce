@@ -17,6 +17,7 @@ async function startServer() {
     credentials: true,
   }));
   app.use(express.json());
+  app.use(express.urlencoded({ extended: false }));
 
   // Connect to MongoDB if URI is provided
   if (process.env.MONGO_URI) {

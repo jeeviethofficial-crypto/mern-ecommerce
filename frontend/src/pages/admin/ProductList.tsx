@@ -26,18 +26,6 @@ export function AdminProductList() {
     fetchProducts();
   }, []);
 
-  const createProductHandler = async () => {
-    if (window.confirm('Are you sure you want to create a new product?')) {
-      try {
-        const config = { headers: { Authorization: `Bearer ${user?.token}` } };
-        await axios.post('/api/products', {}, config);
-        fetchProducts();
-      } catch (error) {
-        console.error('Error creating product', error);
-      }
-    }
-  };
-
   const deleteHandler = async (id: string) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
@@ -54,12 +42,12 @@ export function AdminProductList() {
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h1 className="text-3xl font-extrabold text-neutral-900">Products (Admin)</h1>
-        <button 
-          onClick={createProductHandler}
+        <Link 
+          to="/admin/product/new"
           className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
         >
           <Plus className="w-5 h-5" /> Create Product
-        </button>
+        </Link>
       </div>
 
       <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">

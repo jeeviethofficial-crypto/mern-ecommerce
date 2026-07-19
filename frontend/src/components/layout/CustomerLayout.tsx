@@ -1,13 +1,23 @@
+import { useEffect, useState } from 'react';
 import { Outlet, Link } from 'react-router';
-import { ShoppingCart, User, LogOut } from 'lucide-react';
+import { ShoppingCart, User, LogOut, Moon, Sun } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 
 export function CustomerLayout() {
   const { user, logout } = useAuth();
   const { cartItems } = useCart();
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const savedTheme = localStorage.getItem('theme');
+    return savedTheme ? savedTheme === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
   
   const cartItemsCount = cartItems.reduce((acc, item) => acc + item.qty, 0);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', isDarkMode);
+    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+  }, [isDarkMode]);
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
@@ -18,7 +28,16 @@ export function CustomerLayout() {
               E-Shop
             </Link>
             
-            <nav className="flex items-center space-x-6">
+            <nav className="flex items-center space-x-4 sm:space-x-6">
+              <button
+                type="button"
+                onClick={() => setIsDarkMode((currentTheme) => !currentTheme)}
+                aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+                title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+                className="rounded-lg p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors"
+              >
+                {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              </button>
               <Link to="/cart" className="text-gray-600 hover:text-gray-900 flex items-center gap-2 relative">
                 <ShoppingCart className="w-5 h-5" />
                 <span className="hidden sm:inline">Cart</span>
