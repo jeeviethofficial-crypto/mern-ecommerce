@@ -154,6 +154,13 @@ PORT=5000
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret_key
 NODE_ENV=development
+PAYHERE_MERCHANT_ID=your_payhere_merchant_id
+PAYHERE_MERCHANT_SECRET=your_payhere_merchant_secret
+PAYHERE_NOTIFY_URL=https://your-api-domain.com/api/orders/payhere/notify
+PAYHERE_SANDBOX=true
+FRONTEND_URL=http://localhost:5173
+SHIPPING_FEE_LKR=0
+TAX_RATE=0
 ```
 
 | Variable     | Description                                          |
@@ -162,6 +169,23 @@ NODE_ENV=development
 | `MONGO_URI`  | MongoDB connection string (local or Atlas)           |
 | `JWT_SECRET` | Secret key used to sign and verify JWTs              |
 | `NODE_ENV`   | Application environment (`development`/`production`) |
+| `PAYHERE_MERCHANT_ID` | PayHere merchant ID from the Integrations page |
+| `PAYHERE_MERCHANT_SECRET` | Domain-specific PayHere merchant secret; keep this server-only |
+| `PAYHERE_NOTIFY_URL` | Public backend URL for signed PayHere payment notifications |
+| `PAYHERE_SANDBOX` | Set to `true` for sandbox, `false` for production |
+| `FRONTEND_URL` | Customer-facing app URL used for PayHere redirects |
+| `SHIPPING_FEE_LKR` | Server-calculated flat shipping fee in LKR |
+| `TAX_RATE` | Server-calculated tax rate as a decimal, for example `0.08` |
+
+### PayHere setup
+
+1. Add your web domain in the PayHere **Integrations** page and copy its Merchant Secret.
+2. Configure `PAYHERE_NOTIFY_URL` with a public HTTPS backend URL. PayHere cannot send payment notifications to `localhost`.
+3. Start with `PAYHERE_SANDBOX=true`, then change it to `false` only after completing sandbox payments successfully.
+
+The customer is redirected to PayHere for payment. An order is marked paid only after the backend verifies PayHere's signed server notification, never from the browser redirect.
+
+Card details are entered only on PayHere's hosted checkout page. The application stores the gateway payment result and, when provided, a masked card reference only.
 
 ---
 
