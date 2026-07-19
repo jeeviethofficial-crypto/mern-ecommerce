@@ -235,7 +235,6 @@ Admin routes are protected via a role-based middleware that verifies the JWT and
 
 ## 🌱 Seeding the Database
 
-<<<<<<< HEAD
 To seed an admin account into the database:
 
 ```bash
@@ -261,7 +260,6 @@ This will insert sample product and admin user data into MongoDB, useful for loc
 
 ## 📜 Scripts
 
-<<<<<<< HEAD
 
 ### Backend (`backend/`)
 
@@ -281,8 +279,6 @@ This will insert sample product and admin user data into MongoDB, useful for loc
 | `build`   | Build for production        |
 | `preview` | Preview production build    |
 | `lint`    | Type-check without emitting |
-
-=======
 
 ### Server
 
@@ -307,9 +303,7 @@ This will insert sample product and admin user data into MongoDB, useful for loc
 
 ## 📄 License
 
-<<<<<<< HEAD
 This project is open source and available under the [MIT License](LICENSE).
-=======
 This project is licensed under the [MIT License](LICENSE).
 
 ---
