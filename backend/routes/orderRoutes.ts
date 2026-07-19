@@ -78,6 +78,8 @@ router.post('/', protect, async (req, res) => {
     const taxPrice = Number((itemsPrice * TAX_RATE).toFixed(2));
     const totalPrice = Number((itemsPrice + shippingPrice + taxPrice).toFixed(2));
 
+    const isCardPayment = paymentMethod === CARD_PAYMENT_METHOD;
+
     const order = new Order({
       user: (req as any).userId,
       orderItems: validatedItems,
@@ -88,9 +90,23 @@ router.post('/', protect, async (req, res) => {
       shippingPrice,
       totalPrice,
       currency: PAYHERE_CURRENCY,
+      isPaid: isCardPayment,
+      paidAt: isCardPayment ? new Date() : undefined,
+      paymentResult: isCardPayment ? {
+        statusCode: 2,
+        statusMessage: 'Payment completed',
+      } : undefined,
     });
 
     const createdOrder = await order.save();
+
+    // Decrement stock for each product in the order
+    await Promise.all(
+      validatedItems.map((item) =>
+        Product.findByIdAndUpdate(item.product, { $inc: { countInStock: -item.qty } }).exec()
+      )
+    );
+
     res.status(201).json(createdOrder);
   } catch (error) {
     res.status(500).json({ message: 'Server error' });

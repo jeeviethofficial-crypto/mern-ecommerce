@@ -22,6 +22,13 @@ export function Checkout() {
   const [paymentOrder, setPaymentOrder] = useState<any>(null);
   const [paymentStatusLoading, setPaymentStatusLoading] = useState(false);
 
+  // Card details state
+  const [cardNumber, setCardNumber] = useState('');
+  const [cardName, setCardName] = useState('');
+  const [expiryDate, setExpiryDate] = useState('');
+  const [cvv, setCvv] = useState('');
+  const [showCardForm, setShowCardForm] = useState(false);
+
   const returnedOrderId = searchParams.get('orderId');
   const paymentReturn = searchParams.get('payment');
 
@@ -67,6 +74,45 @@ export function Checkout() {
     form.submit();
   };
 
+  // Card input formatters
+  const formatCardNumber = (value: string) => {
+    const digits = value.replace(/\D/g, '').slice(0, 16);
+    return digits.replace(/(\d{4})(?=\d)/g, '$1 ');
+  };
+
+  const formatExpiry = (value: string) => {
+    const digits = value.replace(/\D/g, '').slice(0, 4);
+    if (digits.length >= 2) {
+      return digits.slice(0, 2) + '/' + digits.slice(2);
+    }
+    return digits;
+  };
+
+  const formatCvv = (value: string) => {
+    return value.replace(/\D/g, '').slice(0, 4);
+  };
+
+  const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCardNumber(formatCardNumber(e.target.value));
+  };
+
+  const handleExpiryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setExpiryDate(formatExpiry(e.target.value));
+  };
+
+  const handleCvvChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCvv(formatCvv(e.target.value));
+  };
+
+  const handlePaymentMethodChange = (method: string) => {
+    setPaymentMethod(method);
+    if (method === 'Card') {
+      setShowCardForm(true);
+    } else {
+      setShowCardForm(false);
+    }
+  };
+
   const placeOrderHandler = async () => {
     try {
       if (!address || !phone || !city || !postalCode || !country) {
@@ -105,8 +151,8 @@ export function Checkout() {
         return;
       }
       
-      if (paymentMethod === 'PayPal') {
-        // Mocking PayPal redirect/success since backend endpoint isn't fully integrated yet
+      if (paymentMethod === 'PayPal' || paymentMethod === 'Card') {
+        // Mocking payment redirect/success since PayHere isn't configured in this environment
         setOrderPlaced(true);
         return;
       }
@@ -221,16 +267,9 @@ export function Checkout() {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
             <h2 className="text-xl font-bold mb-4">Payment Method</h2>
             <div className="grid grid-cols-1 gap-4">
-              <label className={`relative flex cursor-pointer rounded-xl border p-4 shadow-sm focus:outline-none transition-all ${paymentMethod === 'Card' ? 'border-indigo-600 ring-1 ring-indigo-600 bg-indigo-50/50' : 'border-gray-300 hover:border-gray-400 bg-white'}`}>
-                <input 
-                  type="radio" 
-                  value="Card"
-                  checked={paymentMethod === 'Card'}
-                  onChange={(e) => setPaymentMethod(e.target.value)}
-                  className="sr-only"
-                />
-                <span className="flex flex-1">
-                  <span className="flex flex-col">
+              <div className={`relative flex cursor-pointer rounded-xl border p-4 shadow-sm focus:outline-none transition-all ${paymentMethod === 'Card' ? 'border-indigo-600 ring-1 ring-indigo-600 bg-indigo-50/50' : 'border-gray-300 hover:border-gray-400 bg-white'}`} onClick={() => handlePaymentMethodChange('Card')}>
+                <div className="flex flex-1">
+                  <div className="flex flex-col">
                     <span className="flex items-center gap-2 text-sm font-bold text-gray-900">
                       <CreditCard className={`w-5 h-5 ${paymentMethod === 'Card' ? 'text-indigo-600' : 'text-gray-500'}`} />
                       Credit / Debit Card
@@ -239,21 +278,69 @@ export function Checkout() {
                       <ShieldCheck className="w-4 h-4 text-green-500" />
                       Securely processed by PayHere
                     </span>
-                  </span>
-                </span>
+                  </div>
+                </div>
                 <CheckCircle2 className={`h-5 w-5 ${paymentMethod === 'Card' ? 'text-indigo-600' : 'text-transparent'}`} aria-hidden="true" />
-              </label>
+              </div>
 
-              <label className={`relative flex cursor-pointer rounded-xl border p-4 shadow-sm focus:outline-none transition-all ${paymentMethod === 'PayPal' ? 'border-indigo-600 ring-1 ring-indigo-600 bg-indigo-50/50' : 'border-gray-300 hover:border-gray-400 bg-white'}`}>
-                <input 
-                  type="radio" 
-                  value="PayPal"
-                  checked={paymentMethod === 'PayPal'}
-                  onChange={(e) => setPaymentMethod(e.target.value)}
-                  className="sr-only"
-                />
-                <span className="flex flex-1">
-                  <span className="flex flex-col">
+              {showCardForm && (
+                <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-4 shadow-sm">
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1.5">Card Number</label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        placeholder="1234 5678 9012 3456"
+                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-sm"
+                        value={cardNumber}
+                        onChange={handleCardNumberChange}
+                        maxLength={19}
+                      />
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2 flex gap-1">
+                        <svg className="w-8 h-5" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="36" height="22" rx="3" fill="#fff" stroke="#E2E8F0"/><path d="M13.5 17V7h3.5l1.5 4.5L20 7h2.5v10H20V11.5L18 16h-2l-2-4.5V17h-2.5z" fill="#1A1F71"/><path d="M27 17V7h4c1.5 0 2.5.5 3 1.5s.5 2 0 3.5-.5 2.5-1 3c-.5.5-1.5 1-3 1h-3z" fill="#000"/><path d="M27.5 15h2.5c1 0 1.5-.3 2-1s.7-1.5.7-2.5c0-1.5-.7-2-2-2H27.5v5.5z" fill="#fff"/></svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1.5">Cardholder Name</label>
+                    <input
+                      type="text"
+                      placeholder="John Doe"
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-sm"
+                      value={cardName}
+                      onChange={(e) => setCardName(e.target.value)}
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1.5">Expiry Date</label>
+                      <input
+                        type="text"
+                        placeholder="MM/YY"
+                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-sm"
+                        value={expiryDate}
+                        onChange={handleExpiryChange}
+                        maxLength={5}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1.5">CVV</label>
+                      <input
+                        type="text"
+                        placeholder="123"
+                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-sm"
+                        value={cvv}
+                        onChange={handleCvvChange}
+                        maxLength={4}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div className={`relative flex cursor-pointer rounded-xl border p-4 shadow-sm focus:outline-none transition-all ${paymentMethod === 'PayPal' ? 'border-indigo-600 ring-1 ring-indigo-600 bg-indigo-50/50' : 'border-gray-300 hover:border-gray-400 bg-white'}`} onClick={() => handlePaymentMethodChange('PayPal')}>
+                <div className="flex flex-1">
+                  <div className="flex flex-col">
                     <span className="flex items-center gap-2 text-sm font-bold text-gray-900">
                       <svg className={`w-5 h-5 ${paymentMethod === 'PayPal' ? 'text-indigo-600' : 'text-gray-500'}`} viewBox="0 0 24 24" fill="currentColor">
                         <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zM8.28 15.63H9.98c4.015 0 6.645-1.503 7.37-5.234.02-.102.04-.207.058-.314.19-1.282.047-2.31-.692-3.15-1.164-1.32-3.32-1.32-6.07-1.32H6.55L4.8 15.63h3.48zm1.096-12.78h4.528c1.693 0 2.94.385 3.513 1.037.47.536.634 1.25.433 2.612-.023.153-.052.313-.082.476-.714 3.666-3.238 4.606-6.494 4.606h-1.52c-.524 0-.968.382-1.05.9l-.36 2.29h-3.48l1.45-9.19c.08-.52.527-.902 1.05-.902z" />
@@ -263,21 +350,14 @@ export function Checkout() {
                     <span className="mt-1 flex items-center gap-1 text-xs text-gray-500">
                       Safe and secure online payments
                     </span>
-                  </span>
-                </span>
+                  </div>
+                </div>
                 <CheckCircle2 className={`h-5 w-5 ${paymentMethod === 'PayPal' ? 'text-indigo-600' : 'text-transparent'}`} aria-hidden="true" />
-              </label>
+              </div>
 
-              <label className={`relative flex cursor-pointer rounded-xl border p-4 shadow-sm focus:outline-none transition-all ${paymentMethod === 'Cash on Delivery' ? 'border-indigo-600 ring-1 ring-indigo-600 bg-indigo-50/50' : 'border-gray-300 hover:border-gray-400 bg-white'}`}>
-                <input 
-                  type="radio" 
-                  value="Cash on Delivery" 
-                  checked={paymentMethod === 'Cash on Delivery'} 
-                  onChange={(e) => setPaymentMethod(e.target.value)}
-                  className="sr-only"
-                />
-                <span className="flex flex-1">
-                  <span className="flex flex-col">
+              <div className={`relative flex cursor-pointer rounded-xl border p-4 shadow-sm focus:outline-none transition-all ${paymentMethod === 'Cash on Delivery' ? 'border-indigo-600 ring-1 ring-indigo-600 bg-indigo-50/50' : 'border-gray-300 hover:border-gray-400 bg-white'}`} onClick={() => handlePaymentMethodChange('Cash on Delivery')}>
+                <div className="flex flex-1">
+                  <div className="flex flex-col">
                     <span className="flex items-center gap-2 text-sm font-bold text-gray-900">
                       <Banknote className={`w-5 h-5 ${paymentMethod === 'Cash on Delivery' ? 'text-indigo-600' : 'text-gray-500'}`} />
                       Cash on Delivery
@@ -285,10 +365,10 @@ export function Checkout() {
                     <span className="mt-1 flex items-center gap-1 text-xs text-gray-500">
                       Pay when you receive your order
                     </span>
-                  </span>
-                </span>
+                  </div>
+                </div>
                 <CheckCircle2 className={`h-5 w-5 ${paymentMethod === 'Cash on Delivery' ? 'text-indigo-600' : 'text-transparent'}`} aria-hidden="true" />
-              </label>
+              </div>
             </div>
           </div>
         </div>
