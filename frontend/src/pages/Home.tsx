@@ -13,6 +13,7 @@ interface Product {
   category: string;
   rating: number;
   numReviews: number;
+  countInStock: number;
 }
 
 export function Home() {
@@ -154,6 +155,19 @@ export function Home() {
                     <p className="text-sm text-neutral-500">{product.category}</p>
                     <div className="mt-1">
                       <Rating value={product.rating} text={`(${product.numReviews})`} />
+                    </div>
+                    <div className="mt-2 flex items-center gap-1.5 text-xs font-medium">
+                      {product.countInStock > 0 ? (
+                        <>
+                          <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                          <span className="text-green-700">{product.countInStock} unit{product.countInStock !== 1 ? 's' : ''} left</span>
+                        </>
+                      ) : (
+                        <>
+                          <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                          <span className="text-red-600">Out of stock</span>
+                        </>
+                      )}
                     </div>
                   </div>
                 </Link>
