@@ -35,6 +35,11 @@ export function Checkout() {
   useEffect(() => {
     if (!user) {
       navigate('/login?redirect=/checkout');
+      return;
+    }
+    // Admins are not allowed to place orders
+    if (user.role === 'admin') {
+      navigate('/');
     }
   }, [user, navigate]);
 
@@ -114,6 +119,12 @@ export function Checkout() {
   };
 
   const placeOrderHandler = async () => {
+    // Admins are not allowed to place orders
+    if (user?.role === 'admin') {
+      alert('Admins are not allowed to place orders');
+      return;
+    }
+
     try {
       if (!address || !phone || !city || !postalCode || !country) {
         alert('Please complete your shipping details.');
@@ -150,7 +161,7 @@ export function Checkout() {
         setOrderPlaced(true);
         return;
       }
-      
+
       if (paymentMethod === 'PayPal' || paymentMethod === 'Card') {
         // Mocking payment redirect/success since PayHere isn't configured in this environment
         setOrderPlaced(true);
@@ -218,7 +229,7 @@ export function Checkout() {
   return (
     <div className="max-w-4xl mx-auto">
       <h1 className="text-3xl font-extrabold text-gray-900 mb-8">Checkout</h1>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="space-y-6">
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
@@ -263,7 +274,7 @@ export function Checkout() {
               />
             </div>
           </div>
-          
+
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
             <h2 className="text-xl font-bold mb-4">Payment Method</h2>
             <div className="grid grid-cols-1 gap-4">
@@ -401,7 +412,7 @@ export function Checkout() {
               </div>
             </div>
 
-            <button 
+            <button
               onClick={placeOrderHandler}
               disabled={loading}
               className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white font-bold py-3 px-4 rounded-xl transition-all hover:shadow-md active:scale-[0.98] flex items-center justify-center gap-2"

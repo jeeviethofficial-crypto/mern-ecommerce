@@ -1,10 +1,14 @@
 import { Link, useNavigate } from 'react-router';
 import { Trash2, ShoppingBag } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 
 export function Cart() {
   const { cartItems, addToCart, removeFromCart, cartTotal } = useCart();
+  const { user } = useAuth();
   const navigate = useNavigate();
+
+  const isAdmin = user?.role === 'admin';
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -17,8 +21,8 @@ export function Cart() {
           </div>
           <h2 className="text-xl font-bold text-gray-900 mb-2">Your cart is empty</h2>
           <p className="text-gray-500 mb-8">Looks like you haven't added anything to your cart yet.</p>
-          <Link 
-            to="/" 
+          <Link
+            to="/"
             className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 transition-colors"
           >
             Start Shopping
@@ -36,10 +40,10 @@ export function Cart() {
                   </Link>
                   <p className="font-bold text-gray-900">${item.price.toFixed(2)}</p>
                 </div>
-                
+
                 <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
-                  <select 
-                    value={item.qty} 
+                  <select
+                    value={item.qty}
                     onChange={(e) => addToCart({ ...item, qty: Number(e.target.value) })}
                     className="border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm py-2 px-3 border"
                   >
@@ -49,7 +53,7 @@ export function Cart() {
                       </option>
                     ))}
                   </select>
-                  <button 
+                  <button
                     onClick={() => removeFromCart(item.product)}
                     className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                     title="Remove item"
@@ -64,7 +68,7 @@ export function Cart() {
           <div className="lg:col-span-1">
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sticky top-24">
               <h2 className="text-lg font-bold text-gray-900 mb-4">Order Summary</h2>
-              
+
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between text-gray-600">
                   <span>Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)} items)</span>
@@ -85,12 +89,18 @@ export function Cart() {
                 </div>
               </div>
 
-              <button 
-                onClick={() => navigate('/checkout')}
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
-              >
-                Proceed to Checkout
-              </button>
+              {isAdmin ? (
+                <div className="bg-neutral-100 text-neutral-500 px-4 py-3 rounded-xl font-medium text-center">
+                  Admins cannot purchase products
+                </div>
+              ) : (
+                <button
+                  onClick={() => navigate('/checkout')}
+                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+                >
+                  Proceed to Checkout
+                </button>
+              )}
             </div>
           </div>
         </div>
