@@ -139,8 +139,21 @@ export function ProductDetail() {
             <Rating value={product.rating} text={`${product.numReviews} review${product.numReviews !== 1 ? 's' : ''}`} />
           </div>
 
-          <div className="text-3xl font-bold text-neutral-900 mb-8">
-            ${product.price.toFixed(2)}
+          <div className="flex items-baseline gap-4 mb-4">
+            <div className="text-3xl font-bold text-neutral-900">
+              ${product.price.toFixed(2)}
+            </div>
+            {product.countInStock > 0 ? (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-100 text-green-800 text-sm font-semibold">
+                <span className="w-2 h-2 rounded-full bg-green-500"></span>
+                {product.countInStock} unit{product.countInStock !== 1 ? 's' : ''} available
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-100 text-red-800 text-sm font-semibold">
+                <span className="w-2 h-2 rounded-full bg-red-500"></span>
+                Out of stock
+              </span>
+            )}
           </div>
 
           <p className="text-neutral-500 text-lg mb-10 leading-relaxed max-w-xl">
@@ -189,7 +202,7 @@ export function ProductDetail() {
             <div className="text-sm text-neutral-500 flex items-center gap-2">
               <div className={`w-2 h-2 rounded-full ${product.countInStock > 0 ? 'bg-green-500' : 'bg-red-500'}`}></div>
               {product.countInStock > 0
-                ? `${product.countInStock} items available in stock`
+                ? `${product.countInStock} unit${product.countInStock !== 1 ? 's' : ''} available in stock`
                 : 'Please check back later for availability.'}
             </div>
           </div>
