@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router';
-import { Trash2, ShoppingBag } from 'lucide-react';
+import { Trash2, ShoppingBag, AlertTriangle } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 
@@ -31,38 +31,55 @@ export function Cart() {
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-4">
-            {cartItems.map((item) => (
-              <div key={item.product} className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 flex flex-col sm:flex-row items-center gap-4">
-                <img src={item.imageUrl} alt={item.name} className="w-24 h-24 object-cover rounded-lg" />
-                <div className="flex-1 text-center sm:text-left">
-                  <Link to={`/product/${item.product}`} className="font-semibold text-gray-900 hover:text-indigo-600 block mb-1">
-                    {item.name}
-                  </Link>
-                  <p className="font-bold text-gray-900">${item.price.toFixed(2)}</p>
-                </div>
+            {cartItems.map((item) => {
+              const isOutOfStock = item.countInStock === 0;
+              const isLowStock = item.countInStock > 0 && item.countInStock <= 5;
+              return (
+                <div key={item.product} className={`bg-white rounded-xl shadow-sm border border-gray-200 p-4 flex flex-col sm:flex-row items-center gap-4 ${isOutOfStock ? 'opacity-60' : ''}`}>
+                  <img src={item.imageUrl} alt={item.name} className="w-24 h-24 object-cover rounded-lg" />
+                  <div className="flex-1 text-center sm:text-left">
+                    <Link to={`/product/${item.product}`} className="font-semibold text-gray-900 hover:text-indigo-600 block mb-1">
+                      {item.name}
+                    </Link>
+                    <p className="font-bold text-gray-900">${item.price.toFixed(2)}</p>
+                    {isLowStock && (
+                      <div className="mt-1 flex items-center gap-1.5 text-xs text-amber-700 font-medium">
+                        <AlertTriangle className="w-3 h-3" />
+                        <span>Only {item.countInStock} unit{item.countInStock !== 1 ? 's' : ''} left in stock</span>
+                      </div>
+                    )}
+                    {isOutOfStock && (
+                      <div className="mt-1 flex items-center gap-1.5 text-xs text-red-600 font-medium">
+                        <AlertTriangle className="w-3 h-3" />
+                        <span>This item is out of stock</span>
+                      </div>
+                    )}
+                  </div>
 
-                <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
-                  <select
-                    value={item.qty}
-                    onChange={(e) => addToCart({ ...item, qty: Number(e.target.value) })}
-                    className="border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm py-2 px-3 border"
-                  >
-                    {[...Array(item.countInStock).keys()].map((x) => (
-                      <option key={x + 1} value={x + 1}>
-                        {x + 1}
-                      </option>
-                    ))}
-                  </select>
-                  <button
-                    onClick={() => removeFromCart(item.product)}
-                    className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                    title="Remove item"
-                  >
-                    <Trash2 className="w-5 h-5" />
-                  </button>
+                  <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
+                    <select
+                      value={item.qty}
+                      onChange={(e) => addToCart({ ...item, qty: Number(e.target.value) })}
+                      disabled={isOutOfStock}
+                      className={`border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm py-2 px-3 border ${isOutOfStock ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                    >
+                      {[...Array(item.countInStock).keys()].map((x) => (
+                        <option key={x + 1} value={x + 1}>
+                          {x + 1}
+                        </option>
+                      ))}
+                    </select>
+                    <button
+                      onClick={() => removeFromCart(item.product)}
+                      className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                      title="Remove item"
+                    >
+                      <Trash2 className="w-5 h-5" />
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           <div className="lg:col-span-1">

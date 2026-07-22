@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router';
-import { ShoppingCart, ArrowLeft, MessageSquare, Star } from 'lucide-react';
+import { ShoppingCart, ArrowLeft, MessageSquare, Star, AlertTriangle } from 'lucide-react';
 import axios from 'axios';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
@@ -103,6 +103,8 @@ export function ProductDetail() {
   if (error) return <div className="text-center py-20 text-red-500 font-medium">{error}</div>;
   if (!product) return null;
 
+  const isLowStock = product.countInStock > 0 && product.countInStock <= 5;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -144,8 +146,12 @@ export function ProductDetail() {
               ${product.price.toFixed(2)}
             </div>
             {product.countInStock > 0 ? (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-100 text-green-800 text-sm font-semibold">
-                <span className="w-2 h-2 rounded-full bg-green-500"></span>
+              <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-semibold ${
+                isLowStock
+                  ? 'bg-amber-100 text-amber-800'
+                  : 'bg-green-100 text-green-800'
+              }`}>
+                <span className={`w-2 h-2 rounded-full ${isLowStock ? 'bg-amber-500' : 'bg-green-500'}`}></span>
                 {product.countInStock} unit{product.countInStock !== 1 ? 's' : ''} available
               </span>
             ) : (
@@ -155,6 +161,18 @@ export function ProductDetail() {
               </span>
             )}
           </div>
+
+          {/* Low Stock Warning */}
+          {isLowStock && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-800 px-4 py-2.5 rounded-xl mb-6 text-sm font-medium"
+            >
+              <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+              <span>Hurry! Only {product.countInStock} unit{product.countInStock !== 1 ? 's' : ''} left in stock.</span>
+            </motion.div>
+          )}
 
           <p className="text-neutral-500 text-lg mb-10 leading-relaxed max-w-xl">
             {product.description}
