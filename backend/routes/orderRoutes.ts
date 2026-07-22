@@ -32,9 +32,15 @@ const createPayHereHash = (orderId: string, amount: string) => {
 
 // @desc    Create new order
 // @route   POST /api/orders
-// @access  Private
+// @access  Private (customers only — admins are not allowed to place orders)
 router.post('/', protect, async (req, res) => {
   try {
+    // Admins are not allowed to place orders
+    if ((req as any).userRole === 'admin') {
+      res.status(403).json({ message: 'Admins are not allowed to place orders' });
+      return;
+    }
+
     const { orderItems, shippingAddress, paymentMethod } = req.body;
 
     if (!Array.isArray(orderItems) || orderItems.length === 0) {
