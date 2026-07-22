@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
-import { Package } from 'lucide-react';
+import { Package, ChevronRight } from 'lucide-react';
 
 export function Profile() {
   const { user, logout } = useAuth();
@@ -77,16 +77,35 @@ export function Profile() {
             ) : (
               <div className="space-y-4">
                 {orders.map((order) => (
-                  <div key={order._id} className="border border-gray-200 rounded-lg p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                    <div>
-                      <p className="font-semibold text-gray-900">Order #{order._id}</p>
-                      <p className="text-sm text-gray-500">{new Date(order.createdAt).toLocaleDateString()}</p>
+                  <div
+                    key={order._id}
+                    onClick={() => navigate(`/orders/${order._id}`)}
+                    className="border border-gray-200 rounded-lg p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 cursor-pointer hover:border-indigo-300 hover:bg-indigo-50/30 transition-all group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-indigo-500 transition-colors flex-shrink-0" />
+                      <div>
+                        <p className="font-semibold text-gray-900 group-hover:text-indigo-700 transition-colors">Order #{order._id.slice(-8).toUpperCase()}</p>
+                        <p className="text-sm text-gray-500">{new Date(order.createdAt).toLocaleDateString()}</p>
+                      </div>
                     </div>
                     <div className="text-right w-full sm:w-auto">
                       <p className="font-bold text-gray-900">${order.totalPrice.toFixed(2)}</p>
-                      <span className={`inline-block px-2 py-1 text-xs font-semibold rounded-full mt-1 ${order.isDelivered ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
-                        {order.isDelivered ? 'Delivered' : 'Processing'}
-                      </span>
+                      <div className="flex flex-wrap gap-1.5 justify-end mt-1">
+                        <span className={`inline-block px-2 py-1 text-xs font-semibold rounded-full ${order.isPaid ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                          {order.isPaid ? 'Paid' : 'Payment Pending'}
+                        </span>
+                        <span className={`inline-block px-2 py-1 text-xs font-semibold rounded-full ${order.isDelivered ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                          {order.isDelivered ? 'Delivered' : 'Processing'}
+                        </span>
+                      </div>
+                      <p className={`text-xs mt-1 ${order.isPaid ? 'text-green-600' : 'text-gray-400'}`}>
+                        {order.isPaid
+                          ? `Paid by ${order.paymentResult?.method || 'card'}`
+                          : order.paymentMethod === 'Cash on Delivery'
+                            ? 'Pay on delivery'
+                            : 'Awaiting card payment'}
+                      </p>
                     </div>
                   </div>
                 ))}

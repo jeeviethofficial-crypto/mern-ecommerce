@@ -154,14 +154,38 @@ PORT=5000
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret_key
 NODE_ENV=development
+PAYHERE_MERCHANT_ID=your_payhere_merchant_id
+PAYHERE_MERCHANT_SECRET=your_payhere_merchant_secret
+PAYHERE_NOTIFY_URL=https://your-api-domain.com/api/orders/payhere/notify
+PAYHERE_SANDBOX=true
+FRONTEND_URL=http://localhost:5173
+SHIPPING_FEE_LKR=0
+TAX_RATE=0
 ```
 
-| Variable     | Description                                          |
-| ------------ | ---------------------------------------------------- |
-| `PORT`       | Port on which the Express server runs                |
-| `MONGO_URI`  | MongoDB connection string (local or Atlas)           |
-| `JWT_SECRET` | Secret key used to sign and verify JWTs              |
-| `NODE_ENV`   | Application environment (`development`/`production`) |
+| Variable                  | Description                                                    |
+| ------------------------- | -------------------------------------------------------------- |
+| `PORT`                    | Port on which the Express server runs                          |
+| `MONGO_URI`               | MongoDB connection string (local or Atlas)                     |
+| `JWT_SECRET`              | Secret key used to sign and verify JWTs                        |
+| `NODE_ENV`                | Application environment (`development`/`production`)           |
+| `PAYHERE_MERCHANT_ID`     | PayHere merchant ID from the Integrations page                 |
+| `PAYHERE_MERCHANT_SECRET` | Domain-specific PayHere merchant secret; keep this server-only |
+| `PAYHERE_NOTIFY_URL`      | Public backend URL for signed PayHere payment notifications    |
+| `PAYHERE_SANDBOX`         | Set to `true` for sandbox, `false` for production              |
+| `FRONTEND_URL`            | Customer-facing app URL used for PayHere redirects             |
+| `SHIPPING_FEE_LKR`        | Server-calculated flat shipping fee in LKR                     |
+| `TAX_RATE`                | Server-calculated tax rate as a decimal, for example `0.08`    |
+
+### PayHere setup
+
+1. Add your web domain in the PayHere **Integrations** page and copy its Merchant Secret.
+2. Configure `PAYHERE_NOTIFY_URL` with a public HTTPS backend URL. PayHere cannot send payment notifications to `localhost`.
+3. Start with `PAYHERE_SANDBOX=true`, then change it to `false` only after completing sandbox payments successfully.
+
+The customer is redirected to PayHere for payment. An order is marked paid only after the backend verifies PayHere's signed server notification, never from the browser redirect.
+
+Card details are entered only on PayHere's hosted checkout page. The application stores the gateway payment result and, when provided, a masked card reference only.
 
 ---
 
@@ -211,6 +235,17 @@ Admin routes are protected via a role-based middleware that verifies the JWT and
 
 ## 🌱 Seeding the Database
 
+To seed an admin account into the database:
+
+```bash
+cd backend
+npm run seed
+```
+
+**Requirements:** `MONGO_URI` must be set in `backend/.env`.
+
+# The script checks for an existing admin account before creating one.
+
 To populate the database with sample products and users, run the seed script from the `server/` directory:
 
 ```bash
@@ -219,9 +254,31 @@ npm run seed
 
 This will insert sample product and admin user data into MongoDB, useful for local development and testing.
 
+> > > > > > > 49c9c4e07b89d166c6d33a4e629f3153970b1207
+
 ---
 
 ## 📜 Scripts
+
+
+### Backend (`backend/`)
+
+| Script  | Description                                  |
+| ------- | -------------------------------------------- |
+| `dev`   | Start dev server with hot-reload (tsx watch) |
+| `build` | Bundle with esbuild to `dist/server.cjs`     |
+| `start` | Start production server from built output    |
+| `lint`  | Type-check without emitting                  |
+| `seed`  | Seed admin account into the database         |
+
+### Frontend (`frontend/`)
+
+| Script    | Description                 |
+| --------- | --------------------------- |
+| `dev`     | Start Vite dev server       |
+| `build`   | Build for production        |
+| `preview` | Preview production build    |
+| `lint`    | Type-check without emitting |
 
 ### Server
 
@@ -240,10 +297,13 @@ This will insert sample product and admin user data into MongoDB, useful for loc
 | `npm run build`   | Build the frontend for production    |
 | `npm run preview` | Preview the production build locally |
 
+> > > > > > > 49c9c4e07b89d166c6d33a4e629f3153970b1207
+
 ---
 
 ## 📄 License
 
+This project is open source and available under the [MIT License](LICENSE).
 This project is licensed under the [MIT License](LICENSE).
 
 ---
@@ -251,3 +311,5 @@ This project is licensed under the [MIT License](LICENSE).
 ## 🙌 Acknowledgements
 
 Built with the MERN stack and TypeScript, styled with Tailwind CSS, and powered by MongoDB Atlas.
+
+> > > > > > > 49c9c4e07b89d166c6d33a4e629f3153970b1207
