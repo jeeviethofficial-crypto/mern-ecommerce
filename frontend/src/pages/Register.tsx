@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 
 export function Register() {
   const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -35,8 +36,13 @@ export function Register() {
       return;
     }
 
+    if (username.length < 3) {
+      setError('Username must be at least 3 characters');
+      return;
+    }
+
     try {
-      await register(name, email, password);
+      await register(name, username, email, password);
     } catch (err: any) {
       setError(err.response?.data?.message || 'Registration failed. Please try again.');
     }
@@ -77,6 +83,27 @@ export function Register() {
                   onChange={(e) => setName(e.target.value)}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   placeholder="John Doe"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+                Username
+              </label>
+              <div className="mt-1">
+                <input
+                  id="username"
+                  name="username"
+                  type="text"
+                  autoComplete="username"
+                  required
+                  minLength={3}
+                  maxLength={20}
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  placeholder="johndoe"
                 />
               </div>
             </div>
