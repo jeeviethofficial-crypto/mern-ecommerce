@@ -7,6 +7,7 @@ interface User {
   username: string;
   email: string;
   role: string;
+  profileImage?: string;
   token: string;
 }
 
@@ -16,6 +17,7 @@ interface AuthContextType {
   register: (name: string, username: string, email: string, password: string) => Promise<void>;
   logout: () => void;
   updateProfile: (name: string, username: string, email: string) => Promise<void>;
+  uploadProfileImage: (imageBase64: string) => Promise<void>;
   changePassword: (currentPassword: string, newPassword: string) => Promise<void>;
 }
 
@@ -55,6 +57,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('userInfo', JSON.stringify(updatedUser));
   };
 
+  const uploadProfileImage = async (imageBase64: string) => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user!.token}`,
+      },
+    };
+    const { data } = await axios.put('/api/users/profile', { profileImage: imageBase64 }, config);
+    const updatedUser = { ...user, ...data };
+    setUser(updatedUser);
+    localStorage.setItem('userInfo', JSON.stringify(updatedUser));
+  };
+
   const changePassword = async (currentPassword: string, newPassword: string) => {
     const config = {
       headers: {
@@ -70,7 +84,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, updateProfile, changePassword }}>
+    <AuthContext.Provider value={{ user, login, register, logout, updateProfile, uploadProfileImage, changePassword }}>
       {children}
     </AuthContext.Provider>
   );

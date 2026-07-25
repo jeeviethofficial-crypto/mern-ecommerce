@@ -17,14 +17,14 @@ const generateToken = (id: string) => {
 // @access  Public
 router.post('/register', async (req, res) => {
   try {
-    const { name, username, email, password } = req.body;
+    const { name, username, email, password, profileImage } = req.body;
 
     if (!name || !username || !email || !password) {
       res.status(400).json({ message: 'All fields are required' });
       return;
     }
 
-    const userExists = await User.findOne({ email: email }).exec();
+    const userExists = await User.findOne({ email }).exec();
     if (userExists) {
       res.status(400).json({ message: 'User already exists' });
       return;
@@ -44,6 +44,7 @@ router.post('/register', async (req, res) => {
       username,
       email,
       password: hashedPassword,
+      profileImage: profileImage || '',
     });
 
     res.status(201).json({
@@ -52,9 +53,11 @@ router.post('/register', async (req, res) => {
       username: user.username,
       email: user.email,
       role: user.role,
+      profileImage: user.profileImage,
       token: generateToken(user._id.toString()),
     });
   } catch (error) {
+    console.error('Register error:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });
@@ -65,7 +68,7 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email: email }).exec();
+    const user = await User.findOne({ email }).exec();
 
     if (user && (await bcrypt.compare(password, user.password))) {
       res.json({
@@ -74,12 +77,14 @@ router.post('/login', async (req, res) => {
         username: user.username,
         email: user.email,
         role: user.role,
+        profileImage: user.profileImage,
         token: generateToken(user._id.toString()),
       });
     } else {
       res.status(401).json({ message: 'Invalid email or password' });
     }
   } catch (error) {
+    console.error('Login error:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });
@@ -97,21 +102,23 @@ router.get('/profile', protect, async (req, res) => {
         username: user.username,
         email: user.email,
         role: user.role,
+        profileImage: user.profileImage,
       });
     } else {
       res.status(404).json({ message: 'User not found' });
     }
   } catch (error) {
+    console.error('Get profile error:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });
 
-// @desc    Update user profile (name, username, email)
+// @desc    Update user profile (name, username, email, profileImage)
 // @route   PUT /api/users/profile
 // @access  Private
 router.put('/profile', protect, async (req, res) => {
   try {
-    const { name, username, email } = req.body;
+    const { name, username, email, profileImage } = req.body;
 
     const user = await User.findById((req as any).userId).exec();
     if (!user) {
@@ -119,40 +126,55 @@ router.put('/profile', protect, async (req, res) => {
       return;
     }
 
-    // Check if email is being changed and is already taken by another user
+    const update: Record<string, any> = {};
+
     if (email && email !== user.email) {
       const emailTaken = await User.findOne({ email }).exec();
       if (emailTaken) {
         res.status(400).json({ message: 'Email already in use' });
         return;
       }
-      user.email = email;
+      update.email = email;
     }
 
-    // Check if username is being changed and is already taken by another user
     if (username && username !== user.username) {
       const usernameTaken = await User.findOne({ username }).exec();
       if (usernameTaken) {
         res.status(400).json({ message: 'Username already taken' });
         return;
       }
-      user.username = username;
+      update.username = username;
     }
 
     if (name) {
-      user.name = name;
+      update.name = name;
     }
 
-    await user.save();
+    if (profileImage !== undefined) {
+      update.profileImage = profileImage;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      (req as any).userId,
+      { $set: update },
+      { new: true }
+    ).exec();
+
+    if (!updatedUser) {
+      res.status(404).json({ message: 'User not found' });
+      return;
+    }
 
     res.json({
-      _id: user._id,
-      name: user.name,
-      username: user.username,
-      email: user.email,
-      role: user.role,
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      username: updatedUser.username,
+      email: updatedUser.email,
+      role: updatedUser.role,
+      profileImage: updatedUser.profileImage,
     });
   } catch (error) {
+    console.error('Update profile error:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });
@@ -192,6 +214,7 @@ router.put('/password', protect, async (req, res) => {
 
     res.json({ message: 'Password updated successfully' });
   } catch (error) {
+    console.error('Change password error:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });

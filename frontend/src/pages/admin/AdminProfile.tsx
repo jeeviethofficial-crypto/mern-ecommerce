@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router';
 import { useAuth } from '../../context/AuthContext';
-import { Save, Key, User as UserIcon, Shield, Package, ClipboardList } from 'lucide-react';
+import { Save, Key, User as UserIcon, Shield, Package, ClipboardList, Upload, X } from 'lucide-react';
 
 export function AdminProfile() {
-  const { user, logout, updateProfile, changePassword } = useAuth();
+  const { user, logout, updateProfile, uploadProfileImage, changePassword } = useAuth();
   const navigate = useNavigate();
 
   // Profile edit form state
@@ -22,6 +22,12 @@ export function AdminProfile() {
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [passwordError, setPasswordError] = useState('');
   const [passwordSuccess, setPasswordSuccess] = useState('');
+
+  // Profile image state
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [imageError, setImageError] = useState('');
+  const [imageSuccess, setImageSuccess] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!user) {
@@ -96,7 +102,64 @@ export function AdminProfile() {
     }
   };
 
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+      setImageError('Please select a valid image file (JPEG, PNG, GIF, WebP)');
+      return;
+    }
+
+    // Validate file size (max 2MB)
+    if (file.size > 2 * 1024 * 1024) {
+      setImageError('Image must be smaller than 2MB');
+      return;
+    }
+
+    setImageError('');
+    setIsUploadingImage(true);
+    setImageSuccess('');
+
+    // Convert to base64
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      const base64String = event.target?.result as string;
+      try {
+        await uploadProfileImage(base64String);
+        setImageSuccess('Profile photo updated successfully!');
+      } catch (err: any) {
+        setImageError(err.response?.data?.message || 'Failed to upload profile photo');
+      } finally {
+        setIsUploadingImage(false);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleRemoveImage = async () => {
+    setImageError('');
+    setImageSuccess('');
+    setIsUploadingImage(true);
+    try {
+      await uploadProfileImage('');
+      setImageSuccess('Profile photo removed successfully!');
+    } catch (err: any) {
+      setImageError(err.response?.data?.message || 'Failed to remove profile photo');
+    } finally {
+      setIsUploadingImage(false);
+    }
+  };
+
+  const triggerFileInput = () => {
+    fileInputRef.current?.click();
+  };
+
   if (!user || user.role !== 'admin') return null;
+
+  const hasProfileImage = user.profileImage && user.profileImage.trim() !== '';
 
   return (
     <div className="space-y-8">
@@ -109,9 +172,55 @@ export function AdminProfile() {
         {/* Sidebar */}
         <div className="lg:col-span-1">
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-neutral-200">
-            <div className="w-20 h-20 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-2xl font-bold mb-4">
-              {user.name.charAt(0)}
+            {/* Profile Image */}
+            <div className="flex flex-col items-center mb-4">
+              {hasProfileImage ? (
+                <div className="relative">
+                  <img
+                    src={user.profileImage}
+                    alt="Profile"
+                    className="w-20 h-20 rounded-full object-cover border-2 border-neutral-200"
+                  />
+                  <button
+                    onClick={handleRemoveImage}
+                    disabled={isUploadingImage}
+                    className="absolute -top-1 -right-1 w-6 h-6 bg-red-100 hover:bg-red-200 text-red-600 rounded-full flex items-center justify-center transition-colors disabled:opacity-50"
+                    title="Remove photo"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+              ) : (
+                <div className="w-20 h-20 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-2xl font-bold">
+                  {user.name.charAt(0)}
+                </div>
+              )}
+
+              <input
+                type="file"
+                ref={fileInputRef}
+                accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                onChange={handleImageChange}
+                className="hidden"
+              />
+
+              <button
+                onClick={triggerFileInput}
+                disabled={isUploadingImage}
+                className="mt-2 flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors disabled:opacity-50"
+              >
+                <Upload className="w-3 h-3" />
+                {isUploadingImage ? 'Uploading...' : hasProfileImage ? 'Change Photo' : 'Add Photo'}
+              </button>
             </div>
+
+            {imageError && (
+              <div className="mb-3 bg-red-50 text-red-600 p-2 rounded-lg text-xs font-medium">{imageError}</div>
+            )}
+            {imageSuccess && (
+              <div className="mb-3 bg-green-50 text-green-600 p-2 rounded-lg text-xs font-medium">{imageSuccess}</div>
+            )}
+
             <h2 className="text-xl font-bold text-neutral-900">{user.name}</h2>
             <p className="text-neutral-500 mb-1">@{user.username}</p>
             <p className="text-neutral-500 mb-4">{user.email}</p>

@@ -87,9 +87,17 @@ export function CustomerLayout() {
                     onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                     className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                   >
-                    <div className="flex items-center justify-center w-8 h-8 text-sm font-bold text-white bg-indigo-600 rounded-full">
-                      {user.name ? getUserInitials(user.name) : <User className="w-4 h-4" />}
-                    </div>
+                    {user.profileImage ? (
+                      <img
+                        src={user.profileImage}
+                        alt={user.name}
+                        className="w-8 h-8 rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="flex items-center justify-center w-8 h-8 text-sm font-bold text-white bg-indigo-600 rounded-full">
+                        {user.name ? getUserInitials(user.name) : <User className="w-4 h-4" />}
+                      </div>
+                    )}
                     <span className="hidden sm:inline text-sm font-medium">{user.name}</span>
                     <ChevronDown className="w-4 h-4 transition-transform duration-200" style={{ transform: isUserMenuOpen ? 'rotate(180deg)' : 'rotate(0)' }} />
                   </button>
