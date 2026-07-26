@@ -108,16 +108,16 @@ export function ImageCropper({ imageSrc, onCropSave, onCancel, isUploading }: Im
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-lg overflow-hidden flex flex-col h-[600px]">
-        <div className="flex justify-between items-center p-4 border-b border-gray-200">
-          <h3 className="text-lg font-bold text-gray-900">Crop Profile Photo</h3>
-          <button onClick={onCancel} className="text-gray-400 hover:text-gray-600 transition-colors">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col h-[600px]">
+        <div className="flex justify-between items-center p-4 border-b border-slate-200 dark:border-slate-800">
+          <h3 className="text-lg font-bold text-slate-900 dark:text-white">Crop Profile Photo</h3>
+          <button onClick={onCancel} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
             <X className="w-5 h-5" />
           </button>
         </div>
         
-        <div className="relative flex-grow bg-gray-900 flex items-center justify-center overflow-hidden p-4" ref={containerRef}>
+        <div className="relative flex-grow bg-slate-950 flex items-center justify-center overflow-hidden p-4" ref={containerRef}>
           <div className="relative inline-flex max-w-full max-h-full select-none items-center justify-center">
             <img 
               ref={imageRef} 
@@ -149,7 +149,7 @@ export function ImageCropper({ imageSrc, onCropSave, onCancel, isUploading }: Im
             
             {/* Draggable Cropper Box */}
             <div 
-              className="absolute border-2 border-white rounded-full cursor-move"
+              className="absolute border-2 border-white rounded-full cursor-move shadow-[0_0_15px_rgba(255,255,255,0.5)]"
               style={{
                 left: `${crop.x}px`,
                 top: `${crop.y}px`,
@@ -162,9 +162,9 @@ export function ImageCropper({ imageSrc, onCropSave, onCancel, isUploading }: Im
           </div>
         </div>
         
-        <div className="p-4 border-t border-gray-200 flex flex-col gap-4">
+        <div className="p-4 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-4">
            <div className="flex items-center gap-4">
-            <span className="text-sm font-medium text-gray-600">Size</span>
+            <span className="text-sm font-medium text-slate-600 dark:text-slate-300">Size</span>
             <input
               type="range"
               value={crop.size}
@@ -176,7 +176,6 @@ export function ImageCropper({ imageSrc, onCropSave, onCancel, isUploading }: Im
                 if (!imageRef.current) return;
                 const { width, height } = imageRef.current.getBoundingClientRect();
                 
-                // Adjust x/y to keep centered if possible, and constrain
                 let newX = crop.x;
                 let newY = crop.y;
                 
@@ -185,17 +184,17 @@ export function ImageCropper({ imageSrc, onCropSave, onCancel, isUploading }: Im
                 
                 setCrop(prev => ({ ...prev, size: newSize, x: newX, y: newY }));
               }}
-              className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+              className="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-600"
             />
           </div>
           <div className="flex justify-end gap-3 pt-2">
-            <button onClick={onCancel} className="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
+            <button onClick={onCancel} className="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors">
               Cancel
             </button>
             <button
               onClick={handleSave}
               disabled={isUploading}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 px-5 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl transition-colors disabled:opacity-50"
             >
               {isUploading ? 'Saving...' : 'Crop & Save'}
             </button>

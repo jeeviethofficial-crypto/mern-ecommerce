@@ -184,11 +184,11 @@ export function Checkout() {
 
     return (
       <div className="max-w-2xl mx-auto text-center py-20">
-        <CheckCircle2 className={`w-20 h-20 mx-auto mb-6 ${isPaid ? 'text-green-500' : 'text-amber-500'}`} />
-        <h1 className="text-4xl font-extrabold text-gray-900 mb-4">
+        <CheckCircle2 className={`w-20 h-20 mx-auto mb-6 ${isPaid ? 'text-emerald-500' : 'text-amber-500'}`} />
+        <h1 className="text-4xl font-extrabold text-slate-900 dark:text-white mb-4">
           {paymentStatusLoading ? 'Checking payment status...' : isPaid ? 'Payment Successful' : wasCancelled ? 'Payment Cancelled' : 'Payment Processing'}
         </h1>
-        <p className="text-lg text-gray-600 mb-8">
+        <p className="text-lg text-slate-600 dark:text-slate-300 mb-8">
           {isPaid
             ? 'Your PayHere payment has been verified and your order is confirmed.'
             : wasCancelled
@@ -197,7 +197,7 @@ export function Checkout() {
         </p>
         <button
           onClick={() => navigate('/profile')}
-          className="bg-indigo-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-indigo-700 transition-colors"
+          className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-xl font-bold transition-colors"
         >
           View My Orders
         </button>
@@ -213,12 +213,12 @@ export function Checkout() {
   if (orderPlaced) {
     return (
       <div className="max-w-2xl mx-auto text-center py-20">
-        <CheckCircle2 className="w-20 h-20 text-green-500 mx-auto mb-6" />
-        <h2 className="text-4xl font-extrabold text-gray-900 mb-4">Order Placed Successfully!</h2>
-        <p className="text-xl text-gray-600 mb-8">Thank you for your purchase.</p>
+        <CheckCircle2 className="w-20 h-20 text-emerald-500 mx-auto mb-6" />
+        <h2 className="text-4xl font-extrabold text-slate-900 dark:text-white mb-4">Order Placed Successfully!</h2>
+        <p className="text-xl text-slate-600 dark:text-slate-300 mb-8">Thank you for your purchase.</p>
         <button
           onClick={() => navigate('/')}
-          className="bg-indigo-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-indigo-700 transition-colors"
+          className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-xl font-bold transition-colors"
         >
           Continue Shopping
         </button>
@@ -228,24 +228,24 @@ export function Checkout() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <h1 className="text-3xl font-extrabold text-gray-900 mb-8">Checkout</h1>
+      <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-8">Checkout</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="space-y-6">
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h2 className="text-xl font-bold mb-4">Shipping Address</h2>
+          <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800">
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4">Shipping Address</h2>
             <div className="space-y-4">
               <input
                 type="text"
                 placeholder="Address"
-                className="w-full px-4 py-2 border rounded-md"
+                className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
               />
               <input
                 type="tel"
                 placeholder="Phone Number"
-                className="w-full px-4 py-2 border rounded-md"
+                className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
               />
@@ -253,14 +253,14 @@ export function Checkout() {
                 <input
                   type="text"
                   placeholder="City"
-                  className="w-full px-4 py-2 border rounded-md"
+                  className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
                 />
                 <input
                   type="text"
                   placeholder="Postal Code"
-                  className="w-full px-4 py-2 border rounded-md"
+                  className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   value={postalCode}
                   onChange={(e) => setPostalCode(e.target.value)}
                 />
@@ -268,78 +268,75 @@ export function Checkout() {
               <input
                 type="text"
                 placeholder="Country"
-                className="w-full px-4 py-2 border rounded-md"
+                className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 value={country}
                 onChange={(e) => setCountry(e.target.value)}
               />
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h2 className="text-xl font-bold mb-4">Payment Method</h2>
+          <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800">
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4">Payment Method</h2>
             <div className="grid grid-cols-1 gap-4">
-              <div className={`relative flex cursor-pointer rounded-xl border p-4 shadow-sm focus:outline-none transition-all ${paymentMethod === 'Card' ? 'border-indigo-600 ring-1 ring-indigo-600 bg-indigo-50/50' : 'border-gray-300 hover:border-gray-400 bg-white'}`} onClick={() => handlePaymentMethodChange('Card')}>
+              <div className={`relative flex cursor-pointer rounded-xl border p-4 shadow-sm focus:outline-none transition-all ${paymentMethod === 'Card' ? 'border-indigo-600 dark:border-indigo-500 ring-1 ring-indigo-600 dark:ring-indigo-500 bg-indigo-50/50 dark:bg-indigo-950/30' : 'border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-600 bg-white dark:bg-slate-800'}`} onClick={() => handlePaymentMethodChange('Card')}>
                 <div className="flex flex-1">
                   <div className="flex flex-col">
-                    <span className="flex items-center gap-2 text-sm font-bold text-gray-900">
-                      <CreditCard className={`w-5 h-5 ${paymentMethod === 'Card' ? 'text-indigo-600' : 'text-gray-500'}`} />
+                    <span className="flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-white">
+                      <CreditCard className={`w-5 h-5 ${paymentMethod === 'Card' ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-500 dark:text-slate-400'}`} />
                       Credit / Debit Card
                     </span>
-                    <span className="mt-1 flex items-center gap-1 text-xs text-gray-500">
-                      <ShieldCheck className="w-4 h-4 text-green-500" />
+                    <span className="mt-1 flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400">
+                      <ShieldCheck className="w-4 h-4 text-emerald-500" />
                       Securely processed by PayHere
                     </span>
                   </div>
                 </div>
-                <CheckCircle2 className={`h-5 w-5 ${paymentMethod === 'Card' ? 'text-indigo-600' : 'text-transparent'}`} aria-hidden="true" />
+                <CheckCircle2 className={`h-5 w-5 ${paymentMethod === 'Card' ? 'text-indigo-600 dark:text-indigo-400' : 'text-transparent'}`} aria-hidden="true" />
               </div>
 
               {showCardForm && (
-                <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-4 shadow-sm">
+                <div className="bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl p-5 space-y-4 shadow-sm">
                   <div>
-                    <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1.5">Card Number</label>
+                    <label className="block text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wide mb-1.5">Card Number</label>
                     <div className="relative">
                       <input
                         type="text"
                         placeholder="1234 5678 9012 3456"
-                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-sm"
+                        className="w-full px-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-sm"
                         value={cardNumber}
                         onChange={handleCardNumberChange}
                         maxLength={19}
                       />
-                      <div className="absolute right-3 top-1/2 -translate-y-1/2 flex gap-1">
-                        <svg className="w-8 h-5" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="36" height="22" rx="3" fill="#fff" stroke="#E2E8F0"/><path d="M13.5 17V7h3.5l1.5 4.5L20 7h2.5v10H20V11.5L18 16h-2l-2-4.5V17h-2.5z" fill="#1A1F71"/><path d="M27 17V7h4c1.5 0 2.5.5 3 1.5s.5 2 0 3.5-.5 2.5-1 3c-.5.5-1.5 1-3 1h-3z" fill="#000"/><path d="M27.5 15h2.5c1 0 1.5-.3 2-1s.7-1.5.7-2.5c0-1.5-.7-2-2-2H27.5v5.5z" fill="#fff"/></svg>
-                      </div>
                     </div>
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1.5">Cardholder Name</label>
+                    <label className="block text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wide mb-1.5">Cardholder Name</label>
                     <input
                       type="text"
                       placeholder="John Doe"
-                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-sm"
+                      className="w-full px-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-sm"
                       value={cardName}
                       onChange={(e) => setCardName(e.target.value)}
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1.5">Expiry Date</label>
+                      <label className="block text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wide mb-1.5">Expiry Date</label>
                       <input
                         type="text"
                         placeholder="MM/YY"
-                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-sm"
+                        className="w-full px-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-sm"
                         value={expiryDate}
                         onChange={handleExpiryChange}
                         maxLength={5}
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1.5">CVV</label>
+                      <label className="block text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wide mb-1.5">CVV</label>
                       <input
                         type="text"
                         placeholder="123"
-                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-sm"
+                        className="w-full px-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-sm"
                         value={cvv}
                         onChange={handleCvvChange}
                         maxLength={4}
@@ -349,64 +346,64 @@ export function Checkout() {
                 </div>
               )}
 
-              <div className={`relative flex cursor-pointer rounded-xl border p-4 shadow-sm focus:outline-none transition-all ${paymentMethod === 'PayPal' ? 'border-indigo-600 ring-1 ring-indigo-600 bg-indigo-50/50' : 'border-gray-300 hover:border-gray-400 bg-white'}`} onClick={() => handlePaymentMethodChange('PayPal')}>
+              <div className={`relative flex cursor-pointer rounded-xl border p-4 shadow-sm focus:outline-none transition-all ${paymentMethod === 'PayPal' ? 'border-indigo-600 dark:border-indigo-500 ring-1 ring-indigo-600 dark:ring-indigo-500 bg-indigo-50/50 dark:bg-indigo-950/30' : 'border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-600 bg-white dark:bg-slate-800'}`} onClick={() => handlePaymentMethodChange('PayPal')}>
                 <div className="flex flex-1">
                   <div className="flex flex-col">
-                    <span className="flex items-center gap-2 text-sm font-bold text-gray-900">
-                      <svg className={`w-5 h-5 ${paymentMethod === 'PayPal' ? 'text-indigo-600' : 'text-gray-500'}`} viewBox="0 0 24 24" fill="currentColor">
+                    <span className="flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-white">
+                      <svg className={`w-5 h-5 ${paymentMethod === 'PayPal' ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-500 dark:text-slate-400'}`} viewBox="0 0 24 24" fill="currentColor">
                         <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zM8.28 15.63H9.98c4.015 0 6.645-1.503 7.37-5.234.02-.102.04-.207.058-.314.19-1.282.047-2.31-.692-3.15-1.164-1.32-3.32-1.32-6.07-1.32H6.55L4.8 15.63h3.48zm1.096-12.78h4.528c1.693 0 2.94.385 3.513 1.037.47.536.634 1.25.433 2.612-.023.153-.052.313-.082.476-.714 3.666-3.238 4.606-6.494 4.606h-1.52c-.524 0-.968.382-1.05.9l-.36 2.29h-3.48l1.45-9.19c.08-.52.527-.902 1.05-.902z" />
                       </svg>
                       PayPal
                     </span>
-                    <span className="mt-1 flex items-center gap-1 text-xs text-gray-500">
+                    <span className="mt-1 flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400">
                       Safe and secure online payments
                     </span>
                   </div>
                 </div>
-                <CheckCircle2 className={`h-5 w-5 ${paymentMethod === 'PayPal' ? 'text-indigo-600' : 'text-transparent'}`} aria-hidden="true" />
+                <CheckCircle2 className={`h-5 w-5 ${paymentMethod === 'PayPal' ? 'text-indigo-600 dark:text-indigo-400' : 'text-transparent'}`} aria-hidden="true" />
               </div>
 
-              <div className={`relative flex cursor-pointer rounded-xl border p-4 shadow-sm focus:outline-none transition-all ${paymentMethod === 'Cash on Delivery' ? 'border-indigo-600 ring-1 ring-indigo-600 bg-indigo-50/50' : 'border-gray-300 hover:border-gray-400 bg-white'}`} onClick={() => handlePaymentMethodChange('Cash on Delivery')}>
+              <div className={`relative flex cursor-pointer rounded-xl border p-4 shadow-sm focus:outline-none transition-all ${paymentMethod === 'Cash on Delivery' ? 'border-indigo-600 dark:border-indigo-500 ring-1 ring-indigo-600 dark:ring-indigo-500 bg-indigo-50/50 dark:bg-indigo-950/30' : 'border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-600 bg-white dark:bg-slate-800'}`} onClick={() => handlePaymentMethodChange('Cash on Delivery')}>
                 <div className="flex flex-1">
                   <div className="flex flex-col">
-                    <span className="flex items-center gap-2 text-sm font-bold text-gray-900">
-                      <Banknote className={`w-5 h-5 ${paymentMethod === 'Cash on Delivery' ? 'text-indigo-600' : 'text-gray-500'}`} />
+                    <span className="flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-white">
+                      <Banknote className={`w-5 h-5 ${paymentMethod === 'Cash on Delivery' ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-500 dark:text-slate-400'}`} />
                       Cash on Delivery
                     </span>
-                    <span className="mt-1 flex items-center gap-1 text-xs text-gray-500">
+                    <span className="mt-1 flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400">
                       Pay when you receive your order
                     </span>
                   </div>
                 </div>
-                <CheckCircle2 className={`h-5 w-5 ${paymentMethod === 'Cash on Delivery' ? 'text-indigo-600' : 'text-transparent'}`} aria-hidden="true" />
+                <CheckCircle2 className={`h-5 w-5 ${paymentMethod === 'Cash on Delivery' ? 'text-indigo-600 dark:text-indigo-400' : 'text-transparent'}`} aria-hidden="true" />
               </div>
             </div>
           </div>
         </div>
 
         <div>
-          <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 sticky top-24">
-            <h2 className="text-xl font-bold mb-4">Order Summary</h2>
+          <div className="bg-slate-50 dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 sticky top-24">
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4">Order Summary</h2>
             <div className="space-y-3 mb-6">
               {cartItems.map((item, index) => (
-                <div key={index} className="flex justify-between text-sm">
+                <div key={index} className="flex justify-between text-sm text-slate-700 dark:text-slate-300">
                   <span>{item.qty} x {item.name}</span>
-                  <span>${(item.qty * item.price).toFixed(2)}</span>
+                  <span className="font-semibold text-slate-900 dark:text-white">${(item.qty * item.price).toFixed(2)}</span>
                 </div>
               ))}
-              <div className="border-t border-gray-300 my-2 pt-2 flex justify-between text-gray-600">
+              <div className="border-t border-slate-200 dark:border-slate-800 my-2 pt-2 flex justify-between text-slate-600 dark:text-slate-400">
                 <span>Items Subtotal</span>
-                <span>${cartTotal.toFixed(2)}</span>
+                <span className="font-semibold text-slate-900 dark:text-white">${cartTotal.toFixed(2)}</span>
               </div>
-              <div className="flex justify-between text-gray-600">
+              <div className="flex justify-between text-slate-600 dark:text-slate-400">
                 <span>Shipping</span>
                 <span>Calculated at checkout</span>
               </div>
-              <div className="flex justify-between text-gray-600">
+              <div className="flex justify-between text-slate-600 dark:text-slate-400">
                 <span>Tax</span>
                 <span>Calculated at checkout</span>
               </div>
-              <div className="border-t border-gray-300 pt-3 flex justify-between font-bold text-gray-900 text-lg">
+              <div className="border-t border-slate-200 dark:border-slate-800 pt-3 flex justify-between font-bold text-slate-900 dark:text-white text-lg">
                 <span>Total</span>
                 <span>Calculated at checkout</span>
               </div>
@@ -415,7 +412,7 @@ export function Checkout() {
             <button
               onClick={placeOrderHandler}
               disabled={loading}
-              className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white font-bold py-3 px-4 rounded-xl transition-all hover:shadow-md active:scale-[0.98] flex items-center justify-center gap-2"
+              className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white font-bold py-3.5 px-4 rounded-xl transition-all hover:shadow-md active:scale-[0.98] flex items-center justify-center gap-2"
             >
               {loading ? 'Processing...' : paymentMethod === 'Card' ? 'Continue to Secure Card Payment' : paymentMethod === 'PayPal' ? 'Continue to PayPal' : 'Place Order'}
             </button>
