@@ -162,16 +162,16 @@ export function AdminProfile() {
   const hasProfileImage = user.profileImage && user.profileImage.trim() !== '';
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 max-w-6xl mx-auto">
       <div className="flex items-center gap-3">
-        <Shield className="w-8 h-8 text-indigo-600" />
-        <h1 className="text-3xl font-extrabold text-neutral-900">Admin Profile</h1>
+        <Shield className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
+        <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white">Admin Profile</h1>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         {/* Sidebar */}
         <div className="lg:col-span-1">
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-neutral-200">
+          <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800">
             {/* Profile Image */}
             <div className="flex flex-col items-center mb-4">
               {hasProfileImage ? (
@@ -179,19 +179,19 @@ export function AdminProfile() {
                   <img
                     src={user.profileImage}
                     alt="Profile"
-                    className="w-20 h-20 rounded-full object-cover border-2 border-neutral-200"
+                    className="w-20 h-20 rounded-full object-cover border-2 border-slate-200 dark:border-slate-700"
                   />
                   <button
                     onClick={handleRemoveImage}
                     disabled={isUploadingImage}
-                    className="absolute -top-1 -right-1 w-6 h-6 bg-red-100 hover:bg-red-200 text-red-600 rounded-full flex items-center justify-center transition-colors disabled:opacity-50"
+                    className="absolute -top-1 -right-1 w-6 h-6 bg-rose-100 dark:bg-rose-950/60 hover:bg-rose-200 dark:hover:bg-rose-900 text-rose-600 dark:text-rose-400 rounded-full flex items-center justify-center transition-colors disabled:opacity-50"
                     title="Remove photo"
                   >
                     <X className="w-3 h-3" />
                   </button>
                 </div>
               ) : (
-                <div className="w-20 h-20 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-2xl font-bold">
+                <div className="w-20 h-20 bg-indigo-100 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 rounded-full flex items-center justify-center text-2xl font-bold">
                   {user.name.charAt(0)}
                 </div>
               )}
@@ -207,7 +207,7 @@ export function AdminProfile() {
               <button
                 onClick={triggerFileInput}
                 disabled={isUploadingImage}
-                className="mt-2 flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors disabled:opacity-50"
+                className="mt-2 flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 rounded-lg transition-colors disabled:opacity-50"
               >
                 <Upload className="w-3 h-3" />
                 {isUploadingImage ? 'Uploading...' : hasProfileImage ? 'Change Photo' : 'Add Photo'}
@@ -215,54 +215,54 @@ export function AdminProfile() {
             </div>
 
             {imageError && (
-              <div className="mb-3 bg-red-50 text-red-600 p-2 rounded-lg text-xs font-medium">{imageError}</div>
+              <div className="mb-3 bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 p-2 rounded-lg text-xs font-medium">{imageError}</div>
             )}
             {imageSuccess && (
-              <div className="mb-3 bg-green-50 text-green-600 p-2 rounded-lg text-xs font-medium">{imageSuccess}</div>
+              <div className="mb-3 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 p-2 rounded-lg text-xs font-medium">{imageSuccess}</div>
             )}
 
-            <h2 className="text-xl font-bold text-neutral-900">{user.name}</h2>
-            <p className="text-neutral-500 mb-1">@{user.username}</p>
-            <p className="text-neutral-500 mb-4">{user.email}</p>
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white">{user.name}</h2>
+            <p className="text-slate-500 dark:text-slate-400 mb-1">@{user.username}</p>
+            <p className="text-slate-500 dark:text-slate-400 mb-4">{user.email}</p>
 
             <div className="mb-4">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-100 text-indigo-800 text-xs font-semibold rounded-full">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-100 dark:bg-indigo-950/60 text-indigo-800 dark:text-indigo-300 text-xs font-semibold rounded-full">
                 <Shield className="w-3 h-3" />
                 Administrator
               </span>
             </div>
 
-            <div className="border-t border-neutral-200 my-4"></div>
+            <div className="border-t border-slate-200 dark:border-slate-800 my-4"></div>
 
             <nav className="space-y-2">
               <button
                 onClick={() => navigate('/admin/products')}
-                className="w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-lg transition-colors"
+                className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
               >
                 <Package className="w-4 h-4" />
                 Products
               </button>
               <button
                 onClick={() => navigate('/admin/orders')}
-                className="w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-lg transition-colors"
+                className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
               >
                 <ClipboardList className="w-4 h-4" />
                 Orders
               </button>
               <button
                 onClick={() => navigate('/admin/profile')}
-                className="w-full flex items-center gap-2 px-3 py-2 text-sm text-indigo-600 bg-indigo-50 rounded-lg transition-colors"
+                className="w-full flex items-center gap-2 px-3 py-2 text-sm text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/50 rounded-lg transition-colors font-medium"
               >
                 <UserIcon className="w-4 h-4" />
                 Profile
               </button>
             </nav>
 
-            <div className="border-t border-neutral-200 my-4"></div>
+            <div className="border-t border-slate-200 dark:border-slate-800 my-4"></div>
 
             <button
               onClick={logout}
-              className="w-full bg-neutral-100 hover:bg-neutral-200 text-neutral-800 font-semibold py-2 px-4 rounded-lg transition-colors"
+              className="w-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-semibold py-2 px-4 rounded-lg transition-colors"
             >
               Sign Out
             </button>
@@ -272,13 +272,13 @@ export function AdminProfile() {
         {/* Main Content */}
         <div className="lg:col-span-3 space-y-8">
           {/* Profile Information Section */}
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-neutral-200">
+          <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-neutral-900">Profile Information</h2>
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Profile Information</h2>
               {!isEditingProfile && (
                 <button
                   onClick={() => setIsEditingProfile(true)}
-                  className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 rounded-lg transition-colors"
                 >
                   <UserIcon className="w-4 h-4" />
                   Edit Profile
@@ -287,41 +287,41 @@ export function AdminProfile() {
             </div>
 
             {profileError && (
-              <div className="mb-4 bg-red-50 text-red-600 p-3 rounded-lg text-sm font-medium">{profileError}</div>
+              <div className="mb-4 bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 p-3 rounded-lg text-sm font-medium">{profileError}</div>
             )}
             {profileSuccess && (
-              <div className="mb-4 bg-green-50 text-green-600 p-3 rounded-lg text-sm font-medium">{profileSuccess}</div>
+              <div className="mb-4 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 p-3 rounded-lg text-sm font-medium">{profileSuccess}</div>
             )}
 
             {isEditingProfile ? (
               <form onSubmit={handleProfileSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-1">Full Name</label>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Full Name</label>
                   <input
                     type="text"
                     value={editName}
                     onChange={(e) => setEditName(e.target.value)}
-                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-1">Username</label>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Username</label>
                   <input
                     type="text"
                     value={editUsername}
                     onChange={(e) => setEditUsername(e.target.value)}
                     minLength={3}
                     maxLength={20}
-                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-1">Email Address</label>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Email Address</label>
                   <input
                     type="email"
                     value={editEmail}
                     onChange={(e) => setEditEmail(e.target.value)}
-                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm"
                   />
                 </div>
                 <div className="flex gap-3 pt-2">
@@ -341,7 +341,7 @@ export function AdminProfile() {
                       setEditEmail(user.email || '');
                       setProfileError('');
                     }}
-                    className="px-4 py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-100 rounded-lg transition-colors"
+                    className="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
                   >
                     Cancel
                   </button>
@@ -349,34 +349,34 @@ export function AdminProfile() {
               </form>
             ) : (
               <div className="space-y-3">
-                <div className="flex justify-between py-2 border-b border-neutral-100">
-                  <span className="text-neutral-500">Full Name</span>
-                  <span className="text-neutral-900 font-medium">{user.name}</span>
+                <div className="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800">
+                  <span className="text-slate-500 dark:text-slate-400">Full Name</span>
+                  <span className="text-slate-900 dark:text-white font-medium">{user.name}</span>
                 </div>
-                <div className="flex justify-between py-2 border-b border-neutral-100">
-                  <span className="text-neutral-500">Username</span>
-                  <span className="text-neutral-900 font-medium">{user.username}</span>
+                <div className="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800">
+                  <span className="text-slate-500 dark:text-slate-400">Username</span>
+                  <span className="text-slate-900 dark:text-white font-medium">{user.username}</span>
                 </div>
-                <div className="flex justify-between py-2 border-b border-neutral-100">
-                  <span className="text-neutral-500">Email</span>
-                  <span className="text-neutral-900 font-medium">{user.email}</span>
+                <div className="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800">
+                  <span className="text-slate-500 dark:text-slate-400">Email</span>
+                  <span className="text-slate-900 dark:text-white font-medium">{user.email}</span>
                 </div>
                 <div className="flex justify-between py-2">
-                  <span className="text-neutral-500">Role</span>
-                  <span className="text-neutral-900 font-medium capitalize">{user.role}</span>
+                  <span className="text-slate-500 dark:text-slate-400">Role</span>
+                  <span className="text-slate-900 dark:text-white font-medium capitalize">{user.role}</span>
                 </div>
               </div>
             )}
           </div>
 
           {/* Password Change Section */}
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-neutral-200">
+          <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-neutral-900">Change Password</h2>
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Change Password</h2>
               {!isChangingPassword && (
                 <button
                   onClick={() => setIsChangingPassword(true)}
-                  className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 rounded-lg transition-colors"
                 >
                   <Key className="w-4 h-4" />
                   Change Password
@@ -385,41 +385,41 @@ export function AdminProfile() {
             </div>
 
             {passwordError && (
-              <div className="mb-4 bg-red-50 text-red-600 p-3 rounded-lg text-sm font-medium">{passwordError}</div>
+              <div className="mb-4 bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 p-3 rounded-lg text-sm font-medium">{passwordError}</div>
             )}
             {passwordSuccess && (
-              <div className="mb-4 bg-green-50 text-green-600 p-3 rounded-lg text-sm font-medium">{passwordSuccess}</div>
+              <div className="mb-4 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 p-3 rounded-lg text-sm font-medium">{passwordSuccess}</div>
             )}
 
             {isChangingPassword ? (
               <form onSubmit={handlePasswordSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-1">Current Password</label>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Current Password</label>
                   <input
                     type="password"
                     value={currentPassword}
                     onChange={(e) => setCurrentPassword(e.target.value)}
-                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-1">New Password</label>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">New Password</label>
                   <input
                     type="password"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     minLength={6}
-                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-1">Confirm New Password</label>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Confirm New Password</label>
                   <input
                     type="password"
                     value={confirmNewPassword}
                     onChange={(e) => setConfirmNewPassword(e.target.value)}
                     minLength={6}
-                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm"
                   />
                 </div>
                 <div className="flex gap-3 pt-2">
@@ -438,14 +438,14 @@ export function AdminProfile() {
                       setNewPassword('');
                       setPasswordError('');
                     }}
-                    className="px-4 py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-100 rounded-lg transition-colors"
+                    className="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
                   >
                     Cancel
                   </button>
                 </div>
               </form>
             ) : (
-              <p className="text-neutral-500 text-sm">Click "Change Password" to update your password.</p>
+              <p className="text-slate-500 dark:text-slate-400 text-sm">Click "Change Password" to update your password.</p>
             )}
           </div>
         </div>

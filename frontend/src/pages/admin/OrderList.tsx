@@ -38,16 +38,16 @@ export function AdminOrderList() {
   };
 
   return (
-    <div className="space-y-8">
-      <h1 className="text-3xl font-extrabold text-neutral-900">Orders (Admin)</h1>
+    <div className="space-y-8 max-w-7xl mx-auto">
+      <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white">Orders (Admin)</h1>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
         {loading ? (
           <div className="p-8 flex justify-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div></div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left whitespace-nowrap">
-              <thead className="bg-neutral-50 text-neutral-500 text-sm font-medium border-b border-neutral-200">
+              <thead className="bg-slate-50 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
                 <tr>
                   <th className="px-6 py-4">ID</th>
                   <th className="px-6 py-4">CUSTOMER</th>
@@ -60,16 +60,16 @@ export function AdminOrderList() {
                   <th className="px-6 py-4 text-right">ACTIONS</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-neutral-100">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                 {orders.map((order) => (
                   <motion.tr 
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     key={order._id} 
-                    className="hover:bg-neutral-50 transition-colors"
+                    className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
                   >
-                    <td className="px-6 py-4 text-sm text-neutral-900 font-medium">{order._id}</td>
-                    <td className="px-6 py-4 text-neutral-500 text-sm">
+                    <td className="px-6 py-4 text-sm text-slate-900 dark:text-white font-medium">{order._id}</td>
+                    <td className="px-6 py-4 text-slate-500 dark:text-slate-400 text-sm">
                       {order.user?.name || 'Deleted customer'}
                     </td>
                     <td className="px-6 py-4">
@@ -80,44 +80,44 @@ export function AdminOrderList() {
                           const imageUrl = item.imageUrl || product?.imageUrl;
 
                           return (
-                            <div key={`${item.product}-${index}`} className="flex items-center gap-3 text-sm text-neutral-900">
-                              <div className="w-10 h-10 rounded-lg overflow-hidden bg-neutral-100 flex-shrink-0">
+                            <div key={`${item.product}-${index}`} className="flex items-center gap-3 text-sm text-slate-900 dark:text-slate-100">
+                              <div className="w-10 h-10 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex-shrink-0">
                                 {imageUrl ? (
                                   <img src={imageUrl} alt={name} className="w-full h-full object-cover" />
                                 ) : (
-                                  <Package className="w-5 h-5 m-2.5 text-neutral-400" />
+                                  <Package className="w-5 h-5 m-2.5 text-slate-400" />
                                 )}
                               </div>
                               <span className="font-medium whitespace-normal">{name}</span>
-                              <span className="text-neutral-500">x{item.qty}</span>
+                              <span className="text-slate-500 dark:text-slate-400">x{item.qty}</span>
                             </div>
                           );
                         })}
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-neutral-500">{new Date(order.createdAt).toLocaleDateString()}</td>
-                    <td className="px-6 py-4 font-bold">${order.totalPrice.toFixed(2)}</td>
-                    <td className="px-6 py-4 text-sm text-neutral-600">
-                      <p className="font-medium text-neutral-900">{order.paymentMethod}</p>
+                    <td className="px-6 py-4 text-slate-500 dark:text-slate-400">{new Date(order.createdAt).toLocaleDateString()}</td>
+                    <td className="px-6 py-4 font-bold text-slate-900 dark:text-white">${order.totalPrice.toFixed(2)}</td>
+                    <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">
+                      <p className="font-medium text-slate-900 dark:text-white">{order.paymentMethod}</p>
                       {order.paymentResult?.method && (
                         <p>{order.paymentResult.method}{order.paymentResult.cardNumber ? ` · ${order.paymentResult.cardNumber}` : ''}</p>
                       )}
                     </td>
                     <td className="px-6 py-4">
-                      {order.isPaid ? <Check className="w-5 h-5 text-green-500" /> : <X className="w-5 h-5 text-red-500" />}
+                      {order.isPaid ? <Check className="w-5 h-5 text-emerald-500" /> : <X className="w-5 h-5 text-rose-500" />}
                     </td>
                     <td className="px-6 py-4">
                       {order.isDelivered ? (
-                        <span className="text-green-600 text-sm font-semibold">{new Date(order.deliveredAt).toLocaleDateString()}</span>
+                        <span className="text-emerald-600 dark:text-emerald-400 text-sm font-semibold">{new Date(order.deliveredAt).toLocaleDateString()}</span>
                       ) : (
-                        <X className="w-5 h-5 text-red-500" />
+                        <X className="w-5 h-5 text-rose-500" />
                       )}
                     </td>
                     <td className="px-6 py-4 text-right">
                       {!order.isDelivered && (
                         <button 
                           onClick={() => deliverHandler(order._id)}
-                          className="bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-semibold py-1.5 px-3 rounded-lg text-sm transition-colors"
+                          className="bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900 text-indigo-600 dark:text-indigo-400 font-semibold py-1.5 px-3 rounded-xl text-sm transition-colors"
                         >
                           Mark Delivered
                         </button>

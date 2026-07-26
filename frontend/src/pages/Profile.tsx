@@ -48,19 +48,23 @@ export function Profile() {
     setEditUsername(user.username || '');
     setEditEmail(user.email || '');
 
-    const fetchOrders = async () => {
-      try {
-        const config = { headers: { Authorization: `Bearer ${user.token}` } };
-        const { data } = await axios.get('/api/orders/myorders', config);
-        setOrders(data);
-      } catch (error) {
-        console.error('Error fetching orders', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (user.role !== 'admin') {
+      const fetchOrders = async () => {
+        try {
+          const config = { headers: { Authorization: `Bearer ${user.token}` } };
+          const { data } = await axios.get('/api/orders/myorders', config);
+          setOrders(data);
+        } catch (error) {
+          console.error('Error fetching orders', error);
+        } finally {
+          setLoading(false);
+        }
+      };
 
-    fetchOrders();
+      fetchOrders();
+    } else {
+      setLoading(false);
+    }
   }, [user, navigate]);
 
   const handleProfileSubmit = async (e: React.FormEvent) => {
@@ -195,7 +199,9 @@ export function Profile() {
     <motion.div variants={containerVariants} initial="hidden" animate="visible" className="max-w-6xl mx-auto">
       <motion.div variants={itemVariants} className="mb-8">
         <h1 className="text-4xl font-extrabold text-neutral-900 dark:text-white tracking-tight">Account Settings</h1>
-        <p className="mt-2 text-neutral-500 dark:text-neutral-400">Manage your profile, security, and orders.</p>
+        <p className="mt-2 text-neutral-500 dark:text-neutral-400">
+          {user.role === 'admin' ? 'Manage your profile and security.' : 'Manage your profile, security, and orders.'}
+        </p>
       </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -394,58 +400,60 @@ export function Profile() {
           </motion.div>
 
           {/* Order History Section */}
-          <motion.div variants={itemVariants} className="bg-white dark:bg-neutral-900 p-8 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.1)] border border-neutral-100 dark:border-neutral-800">
-            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-6">Order History</h2>
+          {user.role !== 'admin' && (
+            <motion.div variants={itemVariants} className="bg-white dark:bg-neutral-900 p-8 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.1)] border border-neutral-100 dark:border-neutral-800">
+              <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-6">Order History</h2>
 
-            {loading ? (
-              <div className="animate-pulse space-y-4">
-                {[1, 2, 3].map(i => <div key={i} className="h-24 bg-neutral-100 dark:bg-neutral-800 rounded-2xl"></div>)}
-              </div>
-            ) : orders.length === 0 ? (
-              <div className="text-center py-16 bg-neutral-50 dark:bg-neutral-800/30 rounded-2xl border border-dashed border-neutral-200 dark:border-neutral-700">
-                <Package className="w-16 h-16 text-neutral-300 dark:text-neutral-600 mx-auto mb-4" />
-                <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-1">No orders yet</h3>
-                <p className="text-neutral-500 dark:text-neutral-400">When you place orders, they will appear here.</p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {orders.map((order) => (
-                  <motion.div
-                    whileHover={{ scale: 1.01 }}
-                    key={order._id}
-                    onClick={() => navigate(`/orders/${order._id}`)}
-                    className="bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700 rounded-2xl p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 cursor-pointer hover:border-indigo-300 dark:hover:border-indigo-500/50 hover:bg-white dark:hover:bg-neutral-800 transition-all group shadow-sm hover:shadow-md"
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="bg-white dark:bg-neutral-900 p-3 rounded-full border border-neutral-200 dark:border-neutral-700 group-hover:border-indigo-300 dark:group-hover:border-indigo-500/50 transition-colors">
-                        <Package className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+              {loading ? (
+                <div className="animate-pulse space-y-4">
+                  {[1, 2, 3].map(i => <div key={i} className="h-24 bg-neutral-100 dark:bg-neutral-800 rounded-2xl"></div>)}
+                </div>
+              ) : orders.length === 0 ? (
+                <div className="text-center py-16 bg-neutral-50 dark:bg-neutral-800/30 rounded-2xl border border-dashed border-neutral-200 dark:border-neutral-700">
+                  <Package className="w-16 h-16 text-neutral-300 dark:text-neutral-600 mx-auto mb-4" />
+                  <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-1">No orders yet</h3>
+                  <p className="text-neutral-500 dark:text-neutral-400">When you place orders, they will appear here.</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {orders.map((order) => (
+                    <motion.div
+                      whileHover={{ scale: 1.01 }}
+                      key={order._id}
+                      onClick={() => navigate(`/orders/${order._id}`)}
+                      className="bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700 rounded-2xl p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 cursor-pointer hover:border-indigo-300 dark:hover:border-indigo-500/50 hover:bg-white dark:hover:bg-neutral-800 transition-all group shadow-sm hover:shadow-md"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="bg-white dark:bg-neutral-900 p-3 rounded-full border border-neutral-200 dark:border-neutral-700 group-hover:border-indigo-300 dark:group-hover:border-indigo-500/50 transition-colors">
+                          <Package className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                        </div>
+                        <div>
+                          <p className="font-bold text-neutral-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                            Order #{order._id.slice(-8).toUpperCase()}
+                          </p>
+                          <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">
+                            {new Date(order.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="font-bold text-neutral-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                          Order #{order._id.slice(-8).toUpperCase()}
-                        </p>
-                        <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">
-                          {new Date(order.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
-                        </p>
+                      <div className="text-right w-full sm:w-auto flex flex-col items-end">
+                        <p className="font-extrabold text-lg text-neutral-900 dark:text-white">${order.totalPrice.toFixed(2)}</p>
+                        <div className="flex flex-wrap gap-2 justify-end mt-2">
+                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${order.isPaid ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'}`}>
+                            {order.isPaid ? 'Paid' : 'Payment Pending'}
+                          </span>
+                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${order.isDelivered ? 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400' : 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'}`}>
+                            {order.isDelivered ? 'Delivered' : 'Processing'}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                    <div className="text-right w-full sm:w-auto flex flex-col items-end">
-                      <p className="font-extrabold text-lg text-neutral-900 dark:text-white">${order.totalPrice.toFixed(2)}</p>
-                      <div className="flex flex-wrap gap-2 justify-end mt-2">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${order.isPaid ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'}`}>
-                          {order.isPaid ? 'Paid' : 'Payment Pending'}
-                        </span>
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${order.isDelivered ? 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400' : 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'}`}>
-                          {order.isDelivered ? 'Delivered' : 'Processing'}
-                        </span>
-                      </div>
-                    </div>
-                    <ChevronRight className="hidden sm:block w-5 h-5 text-neutral-300 dark:text-neutral-600 group-hover:text-indigo-500 dark:group-hover:text-indigo-400 group-hover:translate-x-1 transition-all" />
-                  </motion.div>
-                ))}
-              </div>
-            )}
-          </motion.div>
+                      <ChevronRight className="hidden sm:block w-5 h-5 text-neutral-300 dark:text-neutral-600 group-hover:text-indigo-500 dark:group-hover:text-indigo-400 group-hover:translate-x-1 transition-all" />
+                    </motion.div>
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          )}
         </div>
       </div>
 

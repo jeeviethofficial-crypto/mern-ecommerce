@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   color-scheme: light;
 }
@@ -8,73 +10,39 @@
   color-scheme: dark;
 }
 
-.dark .bg-white {
-  background-color: #171717;
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.dark .bg-gray-50,
-.dark .bg-neutral-50 {
-  background-color: #0f172a;
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: #f8fafc;
+  color: #0f172a;
 }
 
-.dark .bg-gray-100,
-.dark .bg-neutral-100 {
-  background-color: #262626;
+html.dark body {
+  background-color: #090d16;
+  color: #f8fafc;
 }
 
-.dark .text-gray-900,
-.dark .text-neutral-900 {
-  color: #f5f5f5;
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
-
-.dark .text-gray-800,
-.dark .text-neutral-800,
-.dark .text-gray-700,
-.dark .text-neutral-700 {
-  color: #d4d4d4;
+::-webkit-scrollbar-track {
+  background: transparent;
 }
-
-.dark .text-gray-600,
-.dark .text-neutral-600,
-.dark .text-gray-500,
-.dark .text-neutral-500 {
-  color: #a3a3a3;
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
 }
-
-.dark .border-gray-200,
-.dark .border-neutral-200,
-.dark .border-gray-300,
-.dark .border-neutral-300,
-.dark .border-neutral-100 {
-  border-color: #404040;
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
 }
-
-.dark input,
-.dark textarea,
-.dark select,
-.dark .bg-neutral-50 {
-  color: #f5f5f5;
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
-
-.dark input,
-.dark textarea,
-.dark select {
-  background-color: #262626;
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
 }
-
-.dark .hover\:bg-gray-50:hover,
-.dark .hover\:bg-neutral-50:hover,
-.dark .hover\:bg-gray-100:hover,
-.dark .hover\:bg-neutral-100:hover {
-  background-color: #262626;
-}
-
-.dark .hover\:text-gray-900:hover,
-.dark .hover\:text-neutral-900:hover {
-  color: #ffffff;
-}
-
-.dark .mix-blend-multiply {
-  mix-blend-mode: normal;
-}
-
