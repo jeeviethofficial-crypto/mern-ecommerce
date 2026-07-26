@@ -82,25 +82,58 @@ export function Home() {
              animate={{ opacity: 1, y: 0 }}
              transition={{ delay: 0.5 }}
           >
-            <button 
+            <motion.button 
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => {
                 document.getElementById('featured-products')?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="inline-flex items-center gap-2 bg-white text-neutral-900 px-8 py-4 rounded-full font-bold hover:bg-neutral-100 transition-all hover:scale-105 active:scale-95"
+              className="inline-flex items-center gap-2 bg-white text-neutral-900 px-8 py-4 rounded-full font-bold shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all hover:shadow-[0_0_30px_rgba(255,255,255,0.5)] group"
             >
               Shop Collection
-              <ArrowRight className="w-5 h-5" />
-            </button>
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </motion.button>
           </motion.div>
         </div>
 
-        <div className="hidden lg:block relative z-10 w-full max-w-md h-[400px]">
+        <motion.div 
+          animate={{ y: [0, -20, 0] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          className="hidden lg:block relative z-10 w-full max-w-md h-[400px]"
+        >
           {/* Abstract decoration for hero */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/20 to-cyan-500/20 rounded-3xl blur-3xl"></div>
-          <div className="absolute inset-4 border border-white/10 rounded-3xl backdrop-blur-sm bg-white/5 flex items-center justify-center overflow-hidden">
-             <img src="https://images.unsplash.com/photo-1491933382434-500287f9b54b?w=800&q=80" alt="Hero Featured" className="w-full h-full object-cover opacity-80 mix-blend-overlay" />
+          <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/30 to-purple-500/30 rounded-3xl blur-3xl"></div>
+          <div className="absolute inset-4 border border-white/20 rounded-3xl backdrop-blur-md bg-white/10 flex items-center justify-center overflow-hidden shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]">
+             <img src="https://images.unsplash.com/photo-1491933382434-500287f9b54b?w=800&q=80" alt="Hero Featured" className="w-full h-full object-cover opacity-90 hover:scale-110 transition-transform duration-700" />
           </div>
-        </div>
+          
+          {/* Floating Badges */}
+          <motion.div 
+            animate={{ y: [0, 10, 0], rotate: [0, 5, 0] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            className="absolute -right-8 top-12 bg-white text-neutral-900 font-bold py-2 px-4 rounded-xl shadow-xl border border-neutral-100 flex items-center gap-2"
+          >
+            <span className="text-xl">🔥</span> 
+            <div>
+              <div className="text-xs text-neutral-500 uppercase tracking-wider">Hot Trend</div>
+              <div className="text-sm">Premium Gear</div>
+            </div>
+          </motion.div>
+
+          <motion.div 
+            animate={{ y: [0, -10, 0], rotate: [0, -5, 0] }}
+            transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+            className="absolute -left-6 bottom-16 bg-neutral-900/80 backdrop-blur-md text-white font-bold py-3 px-5 rounded-xl shadow-xl border border-white/10 flex items-center gap-3"
+          >
+            <div className="bg-indigo-500 p-2 rounded-lg flex items-center justify-center">
+              <Sparkles className="w-4 h-4 text-white" />
+            </div>
+            <div>
+              <div className="text-sm">New Arrivals</div>
+              <div className="text-xs text-indigo-300">Shop Now</div>
+            </div>
+          </motion.div>
+        </motion.div>
       </motion.section>
 
       {/* Featured Products */}
