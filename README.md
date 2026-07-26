@@ -158,13 +158,6 @@ PORT=5000
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret_key
 NODE_ENV=development
-PAYHERE_MERCHANT_ID=your_payhere_merchant_id
-PAYHERE_MERCHANT_SECRET=your_payhere_merchant_secret
-PAYHERE_NOTIFY_URL=https://your-api-domain.com/api/orders/payhere/notify
-PAYHERE_SANDBOX=true
-FRONTEND_URL=http://localhost:5173
-SHIPPING_FEE_LKR=0
-TAX_RATE=0
 ```
 
 ---
