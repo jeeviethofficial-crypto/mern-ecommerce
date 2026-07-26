@@ -46,18 +46,18 @@ export function AdminOrderList() {
           <div className="p-8 flex justify-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div></div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left whitespace-nowrap">
+            <table className="w-full text-left">
               <thead className="bg-slate-50 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
                 <tr>
-                  <th className="px-6 py-4">ID</th>
-                  <th className="px-6 py-4">CUSTOMER</th>
-                  <th className="px-6 py-4">PRODUCTS</th>
-                  <th className="px-6 py-4">DATE</th>
-                  <th className="px-6 py-4">TOTAL</th>
-                  <th className="px-6 py-4">PAYMENT</th>
-                  <th className="px-6 py-4">PAID</th>
-                  <th className="px-6 py-4">DELIVERED</th>
-                  <th className="px-6 py-4 text-right">ACTIONS</th>
+                  <th className="px-4 py-4 whitespace-nowrap">ID</th>
+                  <th className="px-4 py-4 whitespace-nowrap">CUSTOMER</th>
+                  <th className="px-4 py-4 whitespace-nowrap">PRODUCTS</th>
+                  <th className="px-4 py-4 whitespace-nowrap">DATE</th>
+                  <th className="px-4 py-4 whitespace-nowrap">TOTAL</th>
+                  <th className="px-4 py-4 whitespace-nowrap">PAYMENT</th>
+                  <th className="px-4 py-4 text-center whitespace-nowrap">PAID</th>
+                  <th className="px-4 py-4 text-center whitespace-nowrap">DELIVERED</th>
+                  <th className="px-4 py-4 text-right whitespace-nowrap">ACTIONS</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -68,11 +68,11 @@ export function AdminOrderList() {
                     key={order._id} 
                     className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
                   >
-                    <td className="px-6 py-4 text-sm text-slate-900 dark:text-white font-medium">{order._id}</td>
-                    <td className="px-6 py-4 text-slate-500 dark:text-slate-400 text-sm">
+                    <td className="px-4 py-4 align-middle text-sm text-slate-900 dark:text-white font-mono font-medium max-w-[120px] truncate">{order._id}</td>
+                    <td className="px-4 py-4 align-middle text-slate-500 dark:text-slate-400 text-sm whitespace-nowrap">
                       {order.user?.name || 'Deleted customer'}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-4 align-middle">
                       <div className="space-y-2">
                         {order.orderItems?.map((item: any, index: number) => {
                           const product = typeof item.product === 'object' ? item.product : undefined;
@@ -80,44 +80,48 @@ export function AdminOrderList() {
                           const imageUrl = item.imageUrl || product?.imageUrl;
 
                           return (
-                            <div key={`${item.product}-${index}`} className="flex items-center gap-3 text-sm text-slate-900 dark:text-slate-100">
-                              <div className="w-10 h-10 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex-shrink-0">
+                            <div key={`${item.product}-${index}`} className="flex items-center gap-2 text-sm text-slate-900 dark:text-slate-100">
+                              <div className="w-9 h-9 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex-shrink-0">
                                 {imageUrl ? (
                                   <img src={imageUrl} alt={name} className="w-full h-full object-cover" />
                                 ) : (
-                                  <Package className="w-5 h-5 m-2.5 text-slate-400" />
+                                  <Package className="w-4 h-4 m-2.5 text-slate-400" />
                                 )}
                               </div>
-                              <span className="font-medium whitespace-normal">{name}</span>
-                              <span className="text-slate-500 dark:text-slate-400">x{item.qty}</span>
+                              <span className="font-medium whitespace-nowrap">{name}</span>
+                              <span className="text-slate-500 dark:text-slate-400 whitespace-nowrap">x{item.qty}</span>
                             </div>
                           );
                         })}
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-slate-500 dark:text-slate-400">{new Date(order.createdAt).toLocaleDateString()}</td>
-                    <td className="px-6 py-4 font-bold text-slate-900 dark:text-white">${order.totalPrice.toFixed(2)}</td>
-                    <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">
-                      <p className="font-medium text-slate-900 dark:text-white">{order.paymentMethod}</p>
+                    <td className="px-4 py-4 align-middle text-slate-500 dark:text-slate-400 whitespace-nowrap">{new Date(order.createdAt).toLocaleDateString()}</td>
+                    <td className="px-4 py-4 align-middle font-bold text-slate-900 dark:text-white whitespace-nowrap">${order.totalPrice.toFixed(2)}</td>
+                    <td className="px-4 py-4 align-middle text-sm text-slate-600 dark:text-slate-400">
+                      <p className="font-medium text-slate-900 dark:text-white whitespace-nowrap">{order.paymentMethod}</p>
                       {order.paymentResult?.method && (
-                        <p>{order.paymentResult.method}{order.paymentResult.cardNumber ? ` · ${order.paymentResult.cardNumber}` : ''}</p>
+                        <p className="whitespace-nowrap">{order.paymentResult.method}{order.paymentResult.cardNumber ? ` · ${order.paymentResult.cardNumber}` : ''}</p>
                       )}
                     </td>
-                    <td className="px-6 py-4">
-                      {order.isPaid ? <Check className="w-5 h-5 text-emerald-500" /> : <X className="w-5 h-5 text-rose-500" />}
+                    <td className="px-4 py-4 align-middle">
+                      <div className="flex justify-center items-center">
+                        {order.isPaid ? <Check className="w-5 h-5 text-emerald-500" /> : <X className="w-5 h-5 text-rose-500" />}
+                      </div>
                     </td>
-                    <td className="px-6 py-4">
-                      {order.isDelivered ? (
-                        <span className="text-emerald-600 dark:text-emerald-400 text-sm font-semibold">{new Date(order.deliveredAt).toLocaleDateString()}</span>
-                      ) : (
-                        <X className="w-5 h-5 text-rose-500" />
-                      )}
+                    <td className="px-4 py-4 align-middle">
+                      <div className="flex justify-center items-center">
+                        {order.isDelivered ? (
+                          <span className="text-emerald-600 dark:text-emerald-400 text-sm font-semibold whitespace-nowrap">{new Date(order.deliveredAt).toLocaleDateString()}</span>
+                        ) : (
+                          <X className="w-5 h-5 text-rose-500" />
+                        )}
+                      </div>
                     </td>
-                    <td className="px-6 py-4 text-right">
+                    <td className="px-4 py-4 align-middle text-right">
                       {!order.isDelivered && (
                         <button 
                           onClick={() => deliverHandler(order._id)}
-                          className="bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900 text-indigo-600 dark:text-indigo-400 font-semibold py-1.5 px-3 rounded-xl text-sm transition-colors"
+                          className="bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900 text-indigo-600 dark:text-indigo-400 font-semibold py-1.5 px-3 rounded-xl text-sm transition-colors whitespace-nowrap"
                         >
                           Mark Delivered
                         </button>
