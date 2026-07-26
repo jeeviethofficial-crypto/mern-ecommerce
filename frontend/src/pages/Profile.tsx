@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import { Package, ChevronRight, Save, Key, User as UserIcon, Upload, X } from 'lucide-react';
+import { ImageCropper } from '../components/ImageCropper';
 
 export function Profile() {
   const { user, logout, updateProfile, uploadProfileImage, changePassword } = useAuth();
@@ -31,6 +32,10 @@ export function Profile() {
   const [imageError, setImageError] = useState('');
   const [imageSuccess, setImageSuccess] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Cropper state
+  const [imageSrc, setImageSrc] = useState<string | null>(null);
+  const [showCropModal, setShowCropModal] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -136,23 +141,33 @@ export function Profile() {
     }
 
     setImageError('');
-    setIsUploadingImage(true);
     setImageSuccess('');
 
-    // Convert to base64
+    // Convert to object URL for cropping
     const reader = new FileReader();
-    reader.onload = async (event) => {
-      const base64String = event.target?.result as string;
-      try {
-        await uploadProfileImage(base64String);
-        setImageSuccess('Profile photo updated successfully!');
-      } catch (err: any) {
-        setImageError(err.response?.data?.message || 'Failed to upload profile photo');
-      } finally {
-        setIsUploadingImage(false);
-      }
-    };
+    reader.addEventListener('load', () => {
+      setImageSrc(reader.result?.toString() || '');
+      setShowCropModal(true);
+    });
     reader.readAsDataURL(file);
+    
+    if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+    }
+  };
+
+  const handleCropSave = async (croppedImageBase64: string) => {
+    try {
+      setIsUploadingImage(true);
+      await uploadProfileImage(croppedImageBase64);
+      setImageSuccess('Profile photo updated successfully!');
+      setShowCropModal(false);
+      setImageSrc(null);
+    } catch (err: any) {
+      setImageError(err.response?.data?.message || 'Failed to crop and upload image');
+    } finally {
+      setIsUploadingImage(false);
+    }
   };
 
   const handleRemoveImage = async () => {
@@ -482,6 +497,19 @@ export function Profile() {
           </div>
         </div>
       </div>
+
+      {/* Crop Modal */}
+      {showCropModal && imageSrc && (
+        <ImageCropper
+          imageSrc={imageSrc}
+          isUploading={isUploadingImage}
+          onCropSave={handleCropSave}
+          onCancel={() => {
+            setShowCropModal(false);
+            setImageSrc(null);
+          }}
+        />
+      )}
     </div>
   );
 }
