@@ -163,7 +163,7 @@ export function CustomerLayout() {
       </main>
 
       <footer className="bg-white dark:bg-slate-900/90 border-t border-slate-200 dark:border-slate-800 py-8 text-center text-sm text-slate-500 dark:text-slate-400 transition-colors duration-300">
-        <p>&copy; {new Date().getFullYear()} E-Shop. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} E-Shop.Deneshkar-Jeevith All rights reserved.</p>
         <p className="mt-2 text-xs">Customer Module - MERN E-Commerce</p>
       </footer>
     </div>
