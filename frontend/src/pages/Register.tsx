@@ -75,7 +75,7 @@ export function Register() {
         {/* Left Side - Image/Branding */}
         <div className="hidden lg:flex lg:w-5/12 relative overflow-hidden bg-neutral-900 flex-col justify-between p-10">
           <div 
-            className="absolute inset-0 bg-cover bg-center opacity-50 mix-blend-overlay transition-transform duration-1000 hover:scale-105"
+            className="absolute inset-0 bg-cover bg-center opacity-90 transition-transform duration-1000 hover:scale-105"
             style={{ backgroundImage: "url('https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1200&auto=format&fit=crop')" }}
           ></div>
           <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-neutral-900/40 to-transparent"></div>
