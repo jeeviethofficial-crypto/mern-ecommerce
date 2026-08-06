@@ -9,11 +9,11 @@ export function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   const { login, user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   const redirect = new URLSearchParams(location.search).get('redirect') || '/';
 
   useEffect(() => {
@@ -45,21 +45,21 @@ export function Login() {
 
   return (
     <div className="min-h-[75vh] w-full flex items-center justify-center py-8">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="w-full max-w-5xl flex flex-col lg:flex-row bg-white dark:bg-neutral-900 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden border border-neutral-200/60 dark:border-neutral-800"
       >
-        
+
         {/* Left Side - Image/Branding */}
         <div className="hidden lg:flex lg:w-5/12 relative overflow-hidden bg-neutral-900 flex-col justify-between p-10">
-          <div 
-            className="absolute inset-0 bg-cover bg-center opacity-50 mix-blend-overlay transition-transform duration-1000 hover:scale-105"
+          <div
+            className="absolute inset-0 bg-cover bg-center opacity-90 transition-transform duration-1000 hover:scale-105"
             style={{ backgroundImage: "url('https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?q=80&w=1200&auto=format&fit=crop')" }}
           ></div>
           <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-neutral-900/40 to-transparent"></div>
-          
+
           <div className="relative z-10">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-semibold mb-6 tracking-wide">
               <Sparkles className="w-3.5 h-3.5" /> Premium Experience
@@ -79,7 +79,7 @@ export function Login() {
         {/* Right Side - Form */}
         <div className="w-full lg:w-7/12 p-8 sm:p-12 lg:p-14 flex flex-col justify-center relative">
           <motion.div variants={containerVariants} initial="hidden" animate="visible" className="w-full max-w-sm mx-auto">
-            
+
             <motion.div variants={itemVariants} className="mb-8">
               <h2 className="text-3xl font-extrabold text-neutral-900 dark:text-white tracking-tight">
                 Sign In
@@ -90,7 +90,7 @@ export function Login() {
             </motion.div>
 
             {error && (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 className="mb-6 bg-red-50 dark:bg-red-500/10 border border-red-100 dark:border-red-500/20 text-red-600 dark:text-red-400 p-4 rounded-xl text-sm font-medium flex items-center gap-3"
