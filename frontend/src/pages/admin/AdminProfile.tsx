@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router';
 import { useAuth } from '../../context/AuthContext';
-import { Save, Key, User as UserIcon, Shield, Package, ClipboardList, Upload, X } from 'lucide-react';
+import { Save, Key, User as UserIcon, Shield, Package, ClipboardList, Upload, X, Users } from 'lucide-react';
 
 export function AdminProfile() {
   const { user, logout, updateProfile, uploadProfileImage, changePassword } = useAuth();
@@ -248,6 +248,13 @@ export function AdminProfile() {
               >
                 <ClipboardList className="w-4 h-4" />
                 Orders
+              </button>
+              <button
+                onClick={() => navigate('/admin/users')}
+                className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+              >
+                <Users className="w-4 h-4" />
+                Users
               </button>
               <button
                 onClick={() => navigate('/admin/profile')}
