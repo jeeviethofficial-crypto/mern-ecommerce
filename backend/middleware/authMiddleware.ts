@@ -17,6 +17,7 @@ export const protect = async (req: express.Request, res: express.Response, next:
     }
     (req as any).userId = decoded.id;
     (req as any).userName = user.name;
+    (req as any).userRole = user.role;
     next();
   } catch (error) {
     res.status(401).json({ message: 'Not authorized, token failed' });

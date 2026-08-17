@@ -7,6 +7,7 @@ import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { Checkout } from './pages/Checkout';
 import { Profile } from './pages/Profile';
+import { OrderDetail } from './pages/OrderDetail';
 import { AdminRoute } from './components/AdminRoute';
 import { AdminProductList } from './pages/admin/ProductList';
 import { AdminProductEdit } from './pages/admin/ProductEdit';
@@ -25,6 +26,7 @@ export default function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/orders/:id" element={<OrderDetail />} />
 
           {/* Admin Routes */}
           <Route element={<AdminRoute />}>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router';
-import { Sparkles, ArrowRight } from 'lucide-react';
+import { Sparkles, ArrowRight, AlertTriangle } from 'lucide-react';
 import axios from 'axios';
 import { motion } from 'motion/react';
 import { Rating } from '../components/Rating';
@@ -13,6 +13,7 @@ interface Product {
   category: string;
   rating: number;
   numReviews: number;
+  countInStock: number;
 }
 
 export function Home() {
@@ -124,41 +125,64 @@ export function Home() {
               </div>
             ))
           ) : (
-            products.map((product, index) => (
-              <motion.div
-                key={product._id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Link 
-                  to={`/product/${product._id}`} 
-                  className="group flex flex-col gap-4"
+            products.map((product, index) => {
+              const isLowStock = product.countInStock > 0 && product.countInStock <= 5;
+              return (
+                <motion.div
+                  key={product._id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
                 >
-                  <div className="relative w-full aspect-[4/5] bg-neutral-100 rounded-2xl overflow-hidden">
-                    <img 
-                      src={product.imageUrl} 
-                      alt={product.name} 
-                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
-                    />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
-                  </div>
-                  
-                  <div className="flex flex-col gap-1">
-                    <div className="flex justify-between items-start gap-4">
-                      <h3 className="font-semibold text-neutral-900 leading-tight group-hover:text-indigo-600 transition-colors line-clamp-2">
-                        {product.name}
-                      </h3>
-                      <span className="font-bold text-neutral-900">${product.price.toFixed(2)}</span>
+                  <Link 
+                    to={`/product/${product._id}`} 
+                    className="group flex flex-col gap-4"
+                  >
+                    <div className="relative w-full aspect-[4/5] bg-neutral-100 rounded-2xl overflow-hidden">
+                      <img 
+                        src={product.imageUrl} 
+                        alt={product.name} 
+                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                      />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
+                      {isLowStock && (
+                        <div className="absolute top-3 right-3 bg-amber-100 text-amber-800 p-1.5 rounded-full">
+                          <AlertTriangle className="w-3.5 h-3.5" />
+                        </div>
+                      )}
                     </div>
-                    <p className="text-sm text-neutral-500">{product.category}</p>
-                    <div className="mt-1">
-                      <Rating value={product.rating} text={`(${product.numReviews})`} />
+                    
+                    <div className="flex flex-col gap-1">
+                      <div className="flex justify-between items-start gap-4">
+                        <h3 className="font-semibold text-neutral-900 leading-tight group-hover:text-indigo-600 transition-colors line-clamp-2">
+                          {product.name}
+                        </h3>
+                        <span className="font-bold text-neutral-900">${product.price.toFixed(2)}</span>
+                      </div>
+                      <p className="text-sm text-neutral-500">{product.category}</p>
+                      <div className="mt-1">
+                        <Rating value={product.rating} text={`(${product.numReviews})`} />
+                      </div>
+                      <div className="mt-2 flex items-center gap-1.5 text-xs font-medium">
+                        {product.countInStock > 0 ? (
+                          <>
+                            <span className={`w-1.5 h-1.5 rounded-full ${isLowStock ? 'bg-amber-500' : 'bg-green-500'}`}></span>
+                            <span className={isLowStock ? 'text-amber-700' : 'text-green-700'}>
+                              {isLowStock ? `Only ${product.countInStock} unit${product.countInStock !== 1 ? 's' : ''} left` : `${product.countInStock} unit${product.countInStock !== 1 ? 's' : ''} left`}
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                            <span className="text-red-600">Out of stock</span>
+                          </>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              </motion.div>
-            ))
+                  </Link>
+                </motion.div>
+              );
+            })
           )}
         </div>
       </section>

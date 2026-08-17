@@ -57,9 +57,15 @@ router.get('/:id', async (req, res) => {
 
 // @desc    Create new review
 // @route   POST /api/products/:id/reviews
-// @access  Private
+// @access  Private (customers only — admins are not allowed to rate products)
 router.post('/:id/reviews', protect, async (req, res) => {
   try {
+    // Admins are not allowed to submit reviews
+    if ((req as any).userRole === 'admin') {
+      res.status(403).json({ message: 'Admins are not allowed to rate products' });
+      return;
+    }
+
     const { rating, comment } = req.body;
     const product = await Product.findById(req.params.id).exec();
 

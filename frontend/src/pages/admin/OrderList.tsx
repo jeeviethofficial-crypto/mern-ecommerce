@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import axios from 'axios';
-import { Check, X } from 'lucide-react';
+import { Check, Package, X } from 'lucide-react';
 import { motion } from 'motion/react';
 
 export function AdminOrderList() {
@@ -50,9 +50,11 @@ export function AdminOrderList() {
               <thead className="bg-neutral-50 text-neutral-500 text-sm font-medium border-b border-neutral-200">
                 <tr>
                   <th className="px-6 py-4">ID</th>
-                  <th className="px-6 py-4">USER ID</th>
+                  <th className="px-6 py-4">CUSTOMER</th>
+                  <th className="px-6 py-4">PRODUCTS</th>
                   <th className="px-6 py-4">DATE</th>
                   <th className="px-6 py-4">TOTAL</th>
+                  <th className="px-6 py-4">PAYMENT</th>
                   <th className="px-6 py-4">PAID</th>
                   <th className="px-6 py-4">DELIVERED</th>
                   <th className="px-6 py-4 text-right">ACTIONS</th>
@@ -67,9 +69,40 @@ export function AdminOrderList() {
                     className="hover:bg-neutral-50 transition-colors"
                   >
                     <td className="px-6 py-4 text-sm text-neutral-900 font-medium">{order._id}</td>
-                  <td className="px-6 py-4 text-neutral-500 text-sm">{order.user?.name || order.user?._id}</td>
+                    <td className="px-6 py-4 text-neutral-500 text-sm">
+                      {order.user?.name || 'Deleted customer'}
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="space-y-2">
+                        {order.orderItems?.map((item: any, index: number) => {
+                          const product = typeof item.product === 'object' ? item.product : undefined;
+                          const name = item.name || product?.name || 'Deleted product';
+                          const imageUrl = item.imageUrl || product?.imageUrl;
+
+                          return (
+                            <div key={`${item.product}-${index}`} className="flex items-center gap-3 text-sm text-neutral-900">
+                              <div className="w-10 h-10 rounded-lg overflow-hidden bg-neutral-100 flex-shrink-0">
+                                {imageUrl ? (
+                                  <img src={imageUrl} alt={name} className="w-full h-full object-cover" />
+                                ) : (
+                                  <Package className="w-5 h-5 m-2.5 text-neutral-400" />
+                                )}
+                              </div>
+                              <span className="font-medium whitespace-normal">{name}</span>
+                              <span className="text-neutral-500">x{item.qty}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </td>
                     <td className="px-6 py-4 text-neutral-500">{new Date(order.createdAt).toLocaleDateString()}</td>
                     <td className="px-6 py-4 font-bold">${order.totalPrice.toFixed(2)}</td>
+                    <td className="px-6 py-4 text-sm text-neutral-600">
+                      <p className="font-medium text-neutral-900">{order.paymentMethod}</p>
+                      {order.paymentResult?.method && (
+                        <p>{order.paymentResult.method}{order.paymentResult.cardNumber ? ` · ${order.paymentResult.cardNumber}` : ''}</p>
+                      )}
+                    </td>
                     <td className="px-6 py-4">
                       {order.isPaid ? <Check className="w-5 h-5 text-green-500" /> : <X className="w-5 h-5 text-red-500" />}
                     </td>
