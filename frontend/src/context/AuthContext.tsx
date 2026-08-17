@@ -4,16 +4,21 @@ import axios from 'axios';
 interface User {
   _id: string;
   name: string;
+  
   email: string;
   role: string;
+  profileImage?: string;
   token: string;
 }
 
 interface AuthContextType {
   user: User | null;
   login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, password: string) => Promise<void>;
+  register: (name: string, username: string, email: string, password: string) => Promise<void>;
   logout: () => void;
+  updateProfile: (name: string, username: string, email: string) => Promise<void>;
+  uploadProfileImage: (imageBase64: string) => Promise<void>;
+  changePassword: (currentPassword: string, newPassword: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -34,10 +39,43 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('userInfo', JSON.stringify(data));
   };
 
-  const register = async (name: string, email: string, password: string) => {
-    const { data } = await axios.post('/api/users/register', { name, email, password });
+  const register = async (name: string, username: string, email: string, password: string) => {
+    const { data } = await axios.post('/api/users/register', { name, username, email, password });
     setUser(data);
     localStorage.setItem('userInfo', JSON.stringify(data));
+  };
+
+  const updateProfile = async (name: string, username: string, email: string) => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user!.token}`,
+      },
+    };
+    const { data } = await axios.put('/api/users/profile', { name, username, email }, config);
+    const updatedUser = { ...user, ...data };
+    setUser(updatedUser);
+    localStorage.setItem('userInfo', JSON.stringify(updatedUser));
+  };
+
+  const uploadProfileImage = async (imageBase64: string) => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user!.token}`,
+      },
+    };
+    const { data } = await axios.put('/api/users/profile', { profileImage: imageBase64 }, config);
+    const updatedUser = { ...user, ...data };
+    setUser(updatedUser);
+    localStorage.setItem('userInfo', JSON.stringify(updatedUser));
+  };
+
+  const changePassword = async (currentPassword: string, newPassword: string) => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user!.token}`,
+      },
+    };
+    await axios.put('/api/users/password', { currentPassword, newPassword }, config);
   };
 
   const logout = () => {
@@ -46,7 +84,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout }}>
+    <AuthContext.Provider value={{ user, login, register, logout, updateProfile, uploadProfileImage, changePassword }}>
       {children}
     </AuthContext.Provider>
   );

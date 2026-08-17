@@ -111,29 +111,29 @@ export function ProductDetail() {
       animate={{ opacity: 1, y: 0 }}
       className="pb-12"
     >
-      <Link to="/" className="inline-flex items-center gap-2 text-neutral-500 hover:text-neutral-900 mb-8 transition-colors">
+      <Link to="/" className="inline-flex items-center gap-2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white mb-8 transition-colors">
         <ArrowLeft className="w-4 h-4" /> Back to Collection
       </Link>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 mb-20">
-        {/* Image Gallery (Simplified for now) */}
-        <div className="bg-neutral-100 rounded-3xl overflow-hidden aspect-square flex items-center justify-center p-8">
+        {/* Image Gallery */}
+        <div className="bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden aspect-square flex items-center justify-center p-8">
           <motion.img
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
             src={product.imageUrl}
             alt={product.name}
-            className="w-full h-full object-cover rounded-2xl shadow-2xl mix-blend-multiply"
+            className="w-full h-full object-cover rounded-2xl shadow-xl dark:shadow-slate-950"
           />
         </div>
 
         {/* Product Details */}
         <div className="flex flex-col justify-center">
-          <div className="uppercase tracking-widest text-xs font-bold text-indigo-600 mb-3">
+          <div className="uppercase tracking-widest text-xs font-bold text-indigo-600 dark:text-indigo-400 mb-3">
             {product.category}
           </div>
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-neutral-900 mb-4 tracking-tight leading-tight">
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 dark:text-white mb-4 tracking-tight leading-tight">
             {product.name}
           </h1>
 
@@ -142,21 +142,21 @@ export function ProductDetail() {
           </div>
 
           <div className="flex items-baseline gap-4 mb-4">
-            <div className="text-3xl font-bold text-neutral-900">
+            <div className="text-3xl font-bold text-slate-900 dark:text-white">
               ${product.price.toFixed(2)}
             </div>
             {product.countInStock > 0 ? (
               <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-semibold ${
                 isLowStock
-                  ? 'bg-amber-100 text-amber-800'
-                  : 'bg-green-100 text-green-800'
+                  ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300'
+                  : 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300'
               }`}>
-                <span className={`w-2 h-2 rounded-full ${isLowStock ? 'bg-amber-500' : 'bg-green-500'}`}></span>
+                <span className={`w-2 h-2 rounded-full ${isLowStock ? 'bg-amber-500' : 'bg-emerald-500'}`}></span>
                 {product.countInStock} unit{product.countInStock !== 1 ? 's' : ''} available
               </span>
             ) : (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-100 text-red-800 text-sm font-semibold">
-                <span className="w-2 h-2 rounded-full bg-red-500"></span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 text-sm font-semibold">
+                <span className="w-2 h-2 rounded-full bg-rose-500"></span>
                 Out of stock
               </span>
             )}
@@ -167,36 +167,36 @@ export function ProductDetail() {
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-800 px-4 py-2.5 rounded-xl mb-6 text-sm font-medium"
+              className="flex items-center gap-2 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-300 px-4 py-2.5 rounded-xl mb-6 text-sm font-medium"
             >
               <AlertTriangle className="w-4 h-4 flex-shrink-0" />
               <span>Hurry! Only {product.countInStock} unit{product.countInStock !== 1 ? 's' : ''} left in stock.</span>
             </motion.div>
           )}
 
-          <p className="text-neutral-500 text-lg mb-10 leading-relaxed max-w-xl">
+          <p className="text-slate-600 dark:text-slate-300 text-lg mb-10 leading-relaxed max-w-xl">
             {product.description}
           </p>
 
-          <div className="border-t border-neutral-200 pt-8 mt-auto">
+          <div className="border-t border-slate-200 dark:border-slate-800 pt-8 mt-auto">
             {user?.role === 'admin' ? (
-              <div className="bg-neutral-100 text-neutral-500 px-6 py-4 rounded-xl font-medium flex items-center justify-center mb-4">
+              <div className="bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 px-6 py-4 rounded-xl font-medium flex items-center justify-center mb-4">
                 Admins cannot purchase products
               </div>
             ) : product.countInStock > 0 ? (
               <div className="flex flex-col sm:flex-row gap-4 mb-4">
-                <div className="flex items-center border border-neutral-300 rounded-xl overflow-hidden w-fit h-14">
+                <div className="flex items-center border border-slate-300 dark:border-slate-700 rounded-xl overflow-hidden w-fit h-14 bg-slate-50 dark:bg-slate-800">
                   <button
-                    className="px-5 h-full bg-neutral-50 hover:bg-neutral-100 text-neutral-600 font-medium transition-colors"
+                    className="px-5 h-full hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-medium transition-colors"
                     onClick={() => setQty(Math.max(1, qty - 1))}
                   >
                     -
                   </button>
-                  <div className="px-4 h-full flex items-center justify-center font-semibold min-w-[3.5rem] bg-white">
+                  <div className="px-4 h-full flex items-center justify-center font-semibold min-w-[3.5rem] bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
                     {qty}
                   </div>
                   <button
-                    className="px-5 h-full bg-neutral-50 hover:bg-neutral-100 text-neutral-600 font-medium transition-colors"
+                    className="px-5 h-full hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-medium transition-colors"
                     onClick={() => setQty(Math.min(product.countInStock, qty + 1))}
                   >
                     +
@@ -205,20 +205,20 @@ export function ProductDetail() {
 
                 <button
                   onClick={handleAddToCart}
-                  className="flex-1 flex items-center justify-center gap-2 bg-neutral-900 hover:bg-neutral-800 text-white font-bold h-14 px-8 rounded-xl transition-all hover:shadow-lg active:scale-95"
+                  className="flex-1 flex items-center justify-center gap-2 bg-slate-900 dark:bg-indigo-600 hover:bg-slate-800 dark:hover:bg-indigo-500 text-white font-bold h-14 px-8 rounded-xl transition-all hover:shadow-lg active:scale-95"
                 >
                   <ShoppingCart className="w-5 h-5" />
                   Add to Cart
                 </button>
               </div>
             ) : (
-              <div className="bg-neutral-100 text-neutral-500 px-6 py-4 rounded-xl font-medium flex items-center justify-center mb-4">
+              <div className="bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 px-6 py-4 rounded-xl font-medium flex items-center justify-center mb-4">
                 Currently Out of Stock
               </div>
             )}
 
-            <div className="text-sm text-neutral-500 flex items-center gap-2">
-              <div className={`w-2 h-2 rounded-full ${product.countInStock > 0 ? 'bg-green-500' : 'bg-red-500'}`}></div>
+            <div className="text-sm text-slate-500 dark:text-slate-400 flex items-center gap-2">
+              <div className={`w-2 h-2 rounded-full ${product.countInStock > 0 ? 'bg-emerald-500' : 'bg-rose-500'}`}></div>
               {product.countInStock > 0
                 ? `${product.countInStock} unit${product.countInStock !== 1 ? 's' : ''} available in stock`
                 : 'Please check back later for availability.'}
@@ -228,29 +228,29 @@ export function ProductDetail() {
       </div>
 
       {/* Reviews Section */}
-      <div className="border-t border-neutral-200 pt-16">
+      <div className="border-t border-slate-200 dark:border-slate-800 pt-16">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
           <div className="lg:col-span-1">
-            <h2 className="text-2xl font-bold text-neutral-900 mb-6 flex items-center gap-2">
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
               <MessageSquare className="w-6 h-6" />
               Customer Reviews
             </h2>
 
-            <div className="bg-neutral-50 rounded-3xl p-8 border border-neutral-100">
-              <h3 className="text-lg font-bold text-neutral-900 mb-4">Write a Review</h3>
+            <div className="bg-slate-50 dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">Write a Review</h3>
 
               {user && user.role === 'admin' ? (
-                <div className="bg-white p-6 rounded-2xl border border-neutral-200 text-center">
-                  <p className="text-neutral-600 mb-4">Admins are not allowed to rate products.</p>
+                <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 text-center">
+                  <p className="text-slate-600 dark:text-slate-300 mb-4">Admins are not allowed to rate products.</p>
                 </div>
               ) : user ? (
                 <form onSubmit={submitReviewHandler} className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-1">Rating</label>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Rating</label>
                     <select
                       value={rating}
                       onChange={(e) => setRating(Number(e.target.value))}
-                      className="w-full bg-white border border-neutral-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-shadow"
+                      className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-shadow"
                       required
                     >
                       <option value="">Select...</option>
@@ -262,19 +262,19 @@ export function ProductDetail() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-1">Comment</label>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Comment</label>
                     <textarea
                       rows={4}
                       value={comment}
                       onChange={(e) => setComment(e.target.value)}
-                      className="w-full bg-white border border-neutral-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-shadow resize-none"
+                      className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-shadow resize-none"
                       placeholder="Share your thoughts..."
                       required
                     ></textarea>
                   </div>
 
-                  {reviewError && <div className="text-red-500 text-sm font-medium">{reviewError}</div>}
-                  {reviewSuccess && <div className="text-green-600 text-sm font-medium">Review submitted successfully!</div>}
+                  {reviewError && <div className="text-rose-500 dark:text-rose-400 text-sm font-medium">{reviewError}</div>}
+                  {reviewSuccess && <div className="text-emerald-600 dark:text-emerald-400 text-sm font-medium">Review submitted successfully!</div>}
 
                   <button
                     disabled={reviewLoading}
@@ -285,9 +285,9 @@ export function ProductDetail() {
                   </button>
                 </form>
               ) : (
-                <div className="bg-white p-6 rounded-2xl border border-neutral-200 text-center">
-                  <p className="text-neutral-600 mb-4">Please sign in to write a review.</p>
-                  <Link to={`/login?redirect=/product/${product._id}`} className="inline-block bg-neutral-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-neutral-800 transition-colors">
+                <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 text-center">
+                  <p className="text-slate-600 dark:text-slate-300 mb-4">Please sign in to write a review.</p>
+                  <Link to={`/login?redirect=/product/${product._id}`} className="inline-block bg-slate-900 dark:bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-slate-800 dark:hover:bg-indigo-500 transition-colors">
                     Sign In
                   </Link>
                 </div>
@@ -297,10 +297,10 @@ export function ProductDetail() {
 
           <div className="lg:col-span-2">
             {product.reviews.length === 0 ? (
-              <div className="bg-neutral-50 rounded-3xl p-12 text-center border border-neutral-100 flex flex-col items-center justify-center h-full min-h-[300px]">
-                <Star className="w-12 h-12 text-neutral-300 mb-4" />
-                <h3 className="text-xl font-bold text-neutral-900 mb-2">No Reviews Yet</h3>
-                <p className="text-neutral-500">Be the first to share your experience with this product.</p>
+              <div className="bg-slate-50 dark:bg-slate-900 rounded-3xl p-12 text-center border border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center h-full min-h-[300px]">
+                <Star className="w-12 h-12 text-slate-300 dark:text-slate-700 mb-4" />
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">No Reviews Yet</h3>
+                <p className="text-slate-500 dark:text-slate-400">Be the first to share your experience with this product.</p>
               </div>
             ) : (
               <div className="space-y-6">
@@ -309,21 +309,21 @@ export function ProductDetail() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     key={review._id}
-                    className="bg-white border border-neutral-200 rounded-2xl p-6 sm:p-8"
+                    className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 shadow-sm"
                   >
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center font-bold">
+                        <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-950/70 text-indigo-600 dark:text-indigo-400 rounded-full flex items-center justify-center font-bold">
                           {review.name.charAt(0)}
                         </div>
                         <div>
-                          <p className="font-bold text-neutral-900">{review.name}</p>
-                          <p className="text-xs text-neutral-500">{new Date(review.createdAt).toLocaleDateString()}</p>
+                          <p className="font-bold text-slate-900 dark:text-white">{review.name}</p>
+                          <p className="text-xs text-slate-500 dark:text-slate-400">{new Date(review.createdAt).toLocaleDateString()}</p>
                         </div>
                       </div>
                       <Rating value={review.rating} />
                     </div>
-                    <p className="text-neutral-600 leading-relaxed">{review.comment}</p>
+                    <p className="text-slate-600 dark:text-slate-300 leading-relaxed">{review.comment}</p>
                   </motion.div>
                 ))}
               </div>
